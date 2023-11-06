@@ -1,1 +1,1 @@
-# dotfiles
+# My Void Linux Config
