@@ -147,6 +147,11 @@ def menu():
     qtile.cmd_spawn("/home/dustin/.config/rofi/powermenu.sh")
 
 screens = [
+
+    #
+    # Screen 1
+    #
+
     Screen(
 	    wallpaper='~/pictures/wallpapers/wallpaper-1.png',
 	    wallpaper_mode='fill',
@@ -297,6 +302,11 @@ screens = [
         # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
         # x11_drag_polling_rate = 60,
     ),
+
+    #
+    # Screen 2
+    #
+
     Screen(
 	    wallpaper='~/pictures/wallpapers/wallpaper-1.png',
 	    wallpaper_mode='fill',
