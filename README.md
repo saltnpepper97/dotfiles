@@ -1,0 +1,1 @@
+# My Void Linux Config
