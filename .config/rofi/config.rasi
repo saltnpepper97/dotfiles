@@ -12,7 +12,7 @@ configuration {
 
 /*****----- Global Properties -----*****/
 * {
-    font:           "Mononoki Nerd Font Propo Medium 18";
+    font:           "RobotoMono Nerd Font Propo Medium 18";
     background:     #1f1d2eFF;
     background-alt: #191724FF;
     foreground:     #e0def4FF;
@@ -89,6 +89,7 @@ entry {
     cursor:                      text;
     placeholder:                 "Search...";
     placeholder-color:           inherit;
+    padding:			 0px 0px 0px 10px;
 }
 
 /*****----- Listview -----*****/
@@ -155,6 +156,7 @@ element-text {
     cursor:                      inherit;
     vertical-align:              0.5;
     horizontal-align:            0.0;
+    padding:			 0px 0px 0px 8px;
 }
 
 /*****----- Message -----*****/
