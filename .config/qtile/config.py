@@ -148,7 +148,7 @@ def menu():
 
 screens = [
     Screen(
-	    wallpaper='~/pictures/wallpapers/wallpaper.png',
+	    wallpaper='~/pictures/wallpapers/wallpaper-1.png',
 	    wallpaper_mode='fill',
         bottom=bar.Bar(
             [
@@ -214,7 +214,7 @@ screens = [
         # x11_drag_polling_rate = 60,
     ),
     Screen(
-	    wallpaper='~/pictures/wallpapers/wallpaper.png',
+	    wallpaper='~/pictures/wallpapers/wallpaper-1.png',
 	    wallpaper_mode='fill',
         bottom=bar.Bar(
             [
