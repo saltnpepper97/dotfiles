@@ -152,8 +152,16 @@ screens = [
 	    wallpaper_mode='fill',
         bottom=bar.Bar(
             [
-                widget.TextBox(background="#191724", foreground="#ebbcba", fmt=" ", font="Mononoki Nerd Font Propo", fontsize=26, mouse_callbacks={"Button1": menu}),
+                widget.TextBox(
+                    background="#191724",
+                    foreground="#ebbcba",
+                    fmt=" ", font="Mononoki Nerd Font Propo",
+                    fontsize=26,
+                    mouse_callbacks={"Button1": menu}
+                ),
+
                 widget.Image(filename="~/.config/qtile/assets/1.png"),
+
                 widget.GroupBox(
                     active="#ebbcba",
                     foreground="#e5e9f0",
@@ -165,41 +173,117 @@ screens = [
                     spacing=10,
                     visible_groups=["1", "2", "3", "4"],
                 ),
+
                 widget.Image(filename="~/.config/qtile/assets/2.png"),
+
                 widget.Spacer(length=10),
-                widget.Image(filename="~/.config/qtile/assets/layout.png", margin=9),
+
+                widget.Image(
+                    filename="~/.config/qtile/assets/layout.png",
+                    margin=9
+                ),
                 widget.Spacer(length=5),
                 widget.CurrentLayout(),
+
                 widget.Image(filename="~/.config/qtile/assets/3.png"),
-                widget.TextBox(background="#191724", fmt="", font="Mononoki Nerd Font Propo", mouse_callbacks={"Button1": search}),
-                widget.Spacer(background="#191724", length=5),
-                widget.TextBox(background="#191724", fmt="Search", mouse_callbacks={"Button1": search}),
+
+                widget.TextBox(
+                    background="#191724",
+                    fmt="",
+                    font="Mononoki Nerd Font Propo",
+                    mouse_callbacks={"Button1": search}
+                ),
+                widget.Spacer(
+                    background="#191724",
+                    length=5
+                ),
+                widget.TextBox(
+                    background="#191724",
+                    fmt="Search",
+                    mouse_callbacks={"Button1": search}
+                ),
+
                 widget.Image(filename="~/.config/qtile/assets/4.png"),
+
                 widget.Spacer(length=5),
-                widget.WindowName(format="{name}", empty_group_string="Desktop", max_chars=35, foreground="#ebbcba"),
+
+                widget.WindowName(
+                    format="{name}",
+                    empty_group_string="Desktop",
+                    max_chars=35,
+                    foreground="#ebbcba"
+                ),
+
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
-                widget.Systray(icon_size=24, padding=5),
+
+                widget.Systray(
+                    icon_size=24,
+                    padding=5
+                ),
                 widget.Spacer(length=10),
+
                 widget.Image(filename="~/.config/qtile/assets/5.png"),
-                widget.TextBox(background="#191724", fmt="󰌌", font="Mononoki Nerd Font Propo", fontsize=24),
-                widget.Spacer(background="#191724", length=5),
+
+                widget.TextBox(
+                    background="#191724",
+                    fmt="󰌌",
+                    font="Mononoki Nerd Font Propo",
+                    fontsize=24
+                ),
+                widget.Spacer(
+                    background="#191724",
+                    length=5
+                ),
                 widget.KeyboardLayout(background="#191724"),
+
                 widget.Spacer(background="#191724", length=10),
                 widget.Image(filename="~/.config/qtile/assets/6.png"),
+
                 widget.Spacer(length=10),
-                widget.TextBox(fmt="󰏕", font="Mononoki Nerd Font Propo", fontsize=24),
+
+                widget.TextBox(
+                    fmt="󰏕",
+                    font="Mononoki Nerd Font Propo",
+                    fontsize=24
+                ),
                 widget.Spacer(length=5),
-                widget.CheckUpdates(colour_have_updates="#ebbcba", colour_no_updates="#ebbcba", distro='Void', no_update_string="No Updates", update_interval=3600),
+                widget.CheckUpdates(
+                    colour_have_updates="#ebbcba",
+                    colour_no_updates="#ebbcba",
+                    distro='Void',
+                    no_update_string="No Updates",
+                    update_interval=3600
+                ),
+
                 widget.Spacer(length=10),
+
                 widget.Image(filename="~/.config/qtile/assets/7.png"),
-                widget.Volume(emoji=True, emoji_list=["󰝟", "󰕿", "󰖀", "󰕾"], fontsize=24),
+
+                widget.Volume(
+                    emoji=True,
+                    emoji_list=["󰝟", "󰕿", "󰖀", "󰕾"],
+                    fontsize=24
+                ),
                 widget.Spacer(length=5),
                 widget.Volume(),
+
                 widget.Image(filename="~/.config/qtile/assets/8.png"),
-                widget.TextBox(background="#191724", fmt="", font="Mononoki Nerd Font Propo"),
-                widget.Spacer(background="#191724", length=5),
-                widget.Clock(background="#191724", format="%a %b %d, %I:%M %p"),
+
+                widget.TextBox(
+                    background="#191724",
+                    fmt="",
+                    font="Mononoki Nerd Font Propo"
+                ),
+                widget.Spacer(
+                    background="#191724",
+                    length=5
+                ),
+                widget.Clock(
+                    background="#191724",
+                    format="%a %b %d, %I:%M %p"
+                ),
+
                 widget.Spacer(background="#191724", length=10),
             ],
             38,
@@ -218,8 +302,17 @@ screens = [
 	    wallpaper_mode='fill',
         bottom=bar.Bar(
             [
-                widget.TextBox(background="#191724", foreground="#ebbcba", fmt=" ", font="Mononoki Nerd Font Propo", fontsize=26, mouse_callbacks={"Button1": menu}),
+                widget.TextBox(
+                    background="#191724",
+                    foreground="#ebbcba",
+                    fmt=" ",
+                    font="Mononoki Nerd Font Propo",
+                    fontsize=26,
+                    mouse_callbacks={"Button1": menu}
+                ),
+
                 widget.Image(filename="~/.config/qtile/assets/1.png"),
+
                 widget.GroupBox(
                     active="#ebbcba",
                     foreground="#e5e9f0",
@@ -231,22 +324,60 @@ screens = [
                     spacing=10,
                     visible_groups=["5", "6", "7", "8"],
                 ),
+
                 widget.Image(filename="~/.config/qtile/assets/2.png"),
+
                 widget.Spacer(length=10),
-                widget.Image(filename="~/.config/qtile/assets/layout.png", margin=9),
+
+                widget.Image(
+                    filename="~/.config/qtile/assets/layout.png",
+                    margin=9
+                ),
                 widget.Spacer(length=5),
                 widget.CurrentLayout(),
+
                 widget.Image(filename="~/.config/qtile/assets/3.png"),
-                widget.TextBox(background="#191724", foreground="#ebbcba", fmt="", font="Mononoki Nerd Font Propo", mouse_callbacks={"Button1": search}),
-                widget.Spacer(background="#191724", length=5),
-                widget.TextBox(background="#191724", fmt="Search", mouse_callbacks={"Button1": search}),
+
+                widget.TextBox(
+                    background="#191724",
+                    foreground="#ebbcba",
+                    fmt="",
+                    font="Mononoki Nerd Font Propo",
+                    mouse_callbacks={"Button1": search}
+                ),
+                widget.Spacer(
+                    background="#191724",
+                    length=5
+                ),
+                widget.TextBox(
+                    background="#191724",
+                    fmt="Search",
+                    mouse_callbacks={"Button1": search}
+                ),
+
                 widget.Image(filename="~/.config/qtile/assets/4.png"),
+
                 widget.Spacer(length=5),
+
                 widget.WindowName(foreground="#ebbcba", format="{name}", empty_group_string="Desktop", max_chars=35),
+
                 widget.Image(filename="~/.config/qtile/assets/8.png"),
-                widget.TextBox(background="#191724", foreground="#ebbcba", fmt="", font="Mononoki Nerd Font Propo"),
-                widget.Spacer(background="#191724", length=5),
-                widget.Clock(background="#191724", foreground="#ebbcba", format="%a %b %d, %I:%M %p"),
+
+                widget.TextBox(
+                    background="#191724",
+                    foreground="#ebbcba",
+                    fmt="",
+                    font="Mononoki Nerd Font Propo"
+                ),
+                widget.Spacer(
+                    background="#191724",
+                    length=5),
+                widget.Clock(
+                    background="#191724",
+                    foreground="#ebbcba",
+                    format="%a %b %d, %I:%M %p"
+                ),
+
                 widget.Spacer(background="#191724", length=10),
             ],
             36,
