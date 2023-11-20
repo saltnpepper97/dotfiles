@@ -146,6 +146,9 @@ def search():
 def menu():
     qtile.cmd_spawn("/home/dustin/.config/rofi/powermenu.sh")
 
+def pavucontrol():
+    qtile.cmd_spawn("pavucontrol")
+
 screens = [
 
     #
@@ -268,10 +271,11 @@ screens = [
                 widget.Volume(
                     emoji=True,
                     emoji_list=["󰝟", "󰕿", "󰖀", "󰕾"],
-                    fontsize=24
+                    fontsize=24,
+                    mouse_callbacks={"Button3": pavucontrol}
                 ),
                 widget.Spacer(length=5),
-                widget.Volume(),
+                widget.Volume(mouse_callbacks={"Button3": pavucontrol}),
 
                 widget.Image(filename="~/.config/qtile/assets/8.png"),
 
