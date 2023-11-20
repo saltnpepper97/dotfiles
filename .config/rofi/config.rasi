@@ -29,7 +29,7 @@ window {
     anchor:                      south west;
     fullscreen:                  false;
     width:                       600px;
-    height:                      435px;
+    height:                      398px;
     x-offset:                    12px;
     y-offset:                    -70px;
 
