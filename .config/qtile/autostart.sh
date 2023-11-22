@@ -3,7 +3,7 @@
 # autostart.sh
 
 function run {
-	if ! pgrep $1 ;
+	if ! pgrep -f "$1" ;
 	then
 		$@&
 	fi
@@ -17,8 +17,7 @@ run /usr/libexec/polkit-gnome-authentication-agent-1
 run numlockx
 run picom
 run solaar -w hide
-run /home/dustin/.local/bin/idlehook
-
-exec pipewire &
+run /home/dustin/.local/bin/idleHook
+run pipewire
 
 sleep 2 && notify-send -u low "System started, Welcome $USER"

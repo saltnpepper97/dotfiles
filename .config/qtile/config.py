@@ -20,15 +20,17 @@ session_manager = "/home/dustin/.config/rofi/powermenu.sh"
 # Autostart script
 @hook.subscribe.startup_complete
 def run_every_startup():
-    autostart = os.path.expanduser("~/.config/qtile/autostart.sh")
-    subprocess.run([autostart])
+    script = os.path.expanduser("~/.config/qtile/autostart.sh")
+    subprocess.run([script])
 
+# Group Icons
 @hook.subscribe.setgroup
 def setgroup():
     for i in range(len(groups)):
         qtile.groups[i].label = ""
         qtile.current_group.label = "󰐾"
 
+# Focus firefox when opened
 @hook.subscribe.client_new
 def new_client(client):
     if client.name == "firefox":
@@ -123,7 +125,7 @@ layouts = [
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    layout.MonadTall(border_focus="#31748f", border_normal="#242933", new_client_position="top", border_width=2, margin=10),
+    layout.MonadTall(border_focus="#a6e3a1", border_normal="#1e1e2e", new_client_position="top", border_width=2, margin=10),
     # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
@@ -133,7 +135,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    foreground="#ebbcba",
+    foreground="#cdd6f4",
     font="RobotoMono Nerd Font Medium",
     fontsize=18,
     padding=3,
@@ -156,25 +158,25 @@ screens = [
     #
 
     Screen(
-	    wallpaper='~/pictures/wallpapers/wallpaper-1.png',
+	    wallpaper='~/pictures/wallpapers/wallpaper.png',
 	    wallpaper_mode='fill',
         bottom=bar.Bar(
             [
                 widget.TextBox(
-                    background="#191724",
-                    foreground="#ebbcba",
+                    background="#11111b",
+                    foreground="#89b4fa",
                     fmt=" ", font="Mononoki Nerd Font Propo",
                     fontsize=26,
                     mouse_callbacks={"Button1": menu}
                 ),
 
-                widget.Image(filename="~/.config/qtile/assets/1.png"),
+                widget.Image(filename="~/.config/qtile/assets/catppuccin-mocha/1.png"),
 
                 widget.GroupBox(
-                    active="#ebbcba",
-                    foreground="#e5e9f0",
-                    inactive="#191724",
-                    this_current_screen_border="#31748f",
+                    active="#cdd6f4",
+                    foreground="#cdd6f4",
+                    inactive="#11111b",
+                    this_current_screen_border="#f9e2af",
                     disable_drag=True,
                     fontsize=25,
                     highlight_method='text',
@@ -182,36 +184,37 @@ screens = [
                     visible_groups=["1", "2", "3", "4"],
                 ),
 
-                widget.Image(filename="~/.config/qtile/assets/2.png"),
+                widget.Image(filename="~/.config/qtile/assets/catppuccin-mocha/2.png"),
 
                 widget.Spacer(length=10),
 
                 widget.Image(
-                    filename="~/.config/qtile/assets/layout.png",
+                    filename="~/.config/qtile/assets/catppuccin-mocha/layout.png",
                     margin=9
                 ),
                 widget.Spacer(length=5),
                 widget.CurrentLayout(),
 
-                widget.Image(filename="~/.config/qtile/assets/3.png"),
+                widget.Image(filename="~/.config/qtile/assets/catppuccin-mocha/3.png"),
 
                 widget.TextBox(
-                    background="#191724",
+                    background="#11111b",
+                    foreground="#a6e3a1",
                     fmt="",
                     font="Mononoki Nerd Font Propo",
                     mouse_callbacks={"Button1": search}
                 ),
                 widget.Spacer(
-                    background="#191724",
+                    background="#11111b",
                     length=5
                 ),
                 widget.TextBox(
-                    background="#191724",
+                    background="#11111b",
                     fmt="Search",
                     mouse_callbacks={"Button1": search}
                 ),
 
-                widget.Image(filename="~/.config/qtile/assets/4.png"),
+                widget.Image(filename="~/.config/qtile/assets/catppuccin-mocha/4.png"),
 
                 widget.Spacer(length=5),
 
@@ -219,7 +222,6 @@ screens = [
                     format="{name}",
                     empty_group_string="Desktop",
                     max_chars=35,
-                    foreground="#ebbcba"
                 ),
 
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
@@ -231,22 +233,29 @@ screens = [
                 ),
                 widget.Spacer(length=10),
 
-                widget.Image(filename="~/.config/qtile/assets/5.png"),
+                widget.Image(filename="~/.config/qtile/assets/catppuccin-mocha/5.png"),
 
                 widget.TextBox(
-                    background="#191724",
+                    background="#11111b",
+                    foreground="#fab387",
                     fmt="󰌌",
                     font="Mononoki Nerd Font Propo",
                     fontsize=24
                 ),
                 widget.Spacer(
-                    background="#191724",
+                    background="#11111b",
                     length=5
                 ),
-                widget.KeyboardLayout(background="#191724"),
+                widget.KeyboardLayout(
+                    background="#11111b",
+                    foreground="#fab387"
+                ),
 
-                widget.Spacer(background="#191724", length=10),
-                widget.Image(filename="~/.config/qtile/assets/6.png"),
+                widget.Spacer(
+                    background="#11111b",
+                    length=10
+                ),
+                widget.Image(filename="~/.config/qtile/assets/catppuccin-mocha/6.png"),
 
                 widget.Spacer(length=10),
 
@@ -257,8 +266,8 @@ screens = [
                 ),
                 widget.Spacer(length=5),
                 widget.CheckUpdates(
-                    colour_have_updates="#ebbcba",
-                    colour_no_updates="#ebbcba",
+                    colour_have_updates="#f38ba8",
+                    colour_no_updates="#cdd6f4",
                     distro='Void',
                     no_update_string="No Updates",
                     update_interval=3600
@@ -266,7 +275,7 @@ screens = [
 
                 widget.Spacer(length=10),
 
-                widget.Image(filename="~/.config/qtile/assets/7.png"),
+                widget.Image(filename="~/.config/qtile/assets/catppuccin-mocha/7.png"),
 
                 widget.Volume(
                     emoji=True,
@@ -277,26 +286,31 @@ screens = [
                 widget.Spacer(length=5),
                 widget.Volume(mouse_callbacks={"Button3": pavucontrol}),
 
-                widget.Image(filename="~/.config/qtile/assets/8.png"),
+                widget.Image(filename="~/.config/qtile/assets/catppuccin-mocha/5.png"),
 
                 widget.TextBox(
-                    background="#191724",
+                    background="#11111b",
+                    foreground="#a6e3a1",
                     fmt="",
                     font="Mononoki Nerd Font Propo"
                 ),
                 widget.Spacer(
-                    background="#191724",
+                    background="#11111b",
                     length=5
                 ),
                 widget.Clock(
-                    background="#191724",
+                    background="#11111b",
+                    foreground="#a6e3a1",
                     format="%a %b %d, %I:%M %p"
                 ),
 
-                widget.Spacer(background="#191724", length=10),
+                widget.Spacer(
+                    background="#11111b",
+                    length=10
+                ),
             ],
-            38,
-            background="#26233a",
+            36,
+            background="#1e1e2e",
             # border_width=4,
             # border_color="#1e222a",
             margin=10,
@@ -308,26 +322,26 @@ screens = [
     #
 
     Screen(
-	    wallpaper='~/pictures/wallpapers/wallpaper-1.png',
+	    wallpaper='~/pictures/wallpapers/wallpaper.png',
 	    wallpaper_mode='fill',
         bottom=bar.Bar(
             [
                 widget.TextBox(
-                    background="#191724",
-                    foreground="#ebbcba",
+                    background="#11111b",
+                    foreground="#89b4fa",
                     fmt=" ",
                     font="Mononoki Nerd Font Propo",
                     fontsize=26,
                     mouse_callbacks={"Button1": menu}
                 ),
 
-                widget.Image(filename="~/.config/qtile/assets/1.png"),
+                widget.Image(filename="~/.config/qtile/assets/catppuccin-mocha/1.png"),
 
                 widget.GroupBox(
-                    active="#ebbcba",
-                    foreground="#e5e9f0",
-                    inactive="#191724",
-                    this_current_screen_border="#31748f",
+                    active="#cdd6f4",
+                    foreground="#cdd6f4",
+                    inactive="#11111b",
+                    this_current_screen_border="#f9e2af",
                     disable_drag=True,
                     fontsize=25,
                     highlight_method='text',
@@ -335,63 +349,67 @@ screens = [
                     visible_groups=["5", "6", "7", "8"],
                 ),
 
-                widget.Image(filename="~/.config/qtile/assets/2.png"),
+                widget.Image(filename="~/.config/qtile/assets/catppuccin-mocha/2.png"),
 
                 widget.Spacer(length=10),
 
                 widget.Image(
-                    filename="~/.config/qtile/assets/layout.png",
+                    filename="~/.config/qtile/assets/catppuccin-mocha/layout.png",
                     margin=9
                 ),
                 widget.Spacer(length=5),
                 widget.CurrentLayout(),
 
-                widget.Image(filename="~/.config/qtile/assets/3.png"),
+                widget.Image(filename="~/.config/qtile/assets/catppuccin-mocha/3.png"),
 
                 widget.TextBox(
-                    background="#191724",
-                    foreground="#ebbcba",
+                    background="#11111b",
+                    foreground="#a6e3a1",
                     fmt="",
                     font="Mononoki Nerd Font Propo",
                     mouse_callbacks={"Button1": search}
                 ),
                 widget.Spacer(
-                    background="#191724",
+                    background="#11111b",
                     length=5
                 ),
                 widget.TextBox(
-                    background="#191724",
+                    background="#11111b",
                     fmt="Search",
                     mouse_callbacks={"Button1": search}
                 ),
 
-                widget.Image(filename="~/.config/qtile/assets/4.png"),
+                widget.Image(filename="~/.config/qtile/assets/catppuccin-mocha/4.png"),
 
                 widget.Spacer(length=5),
 
-                widget.WindowName(foreground="#ebbcba", format="{name}", empty_group_string="Desktop", max_chars=35),
+                widget.WindowName(
+                    format="{name}",
+                    empty_group_string="Desktop",
+                    max_chars=35
+                ),
 
-                widget.Image(filename="~/.config/qtile/assets/8.png"),
+                widget.Image(filename="~/.config/qtile/assets/catppuccin-mocha/5.png"),
 
                 widget.TextBox(
-                    background="#191724",
-                    foreground="#ebbcba",
+                    background="#11111b",
+                    foreground="#a6e3a1",
                     fmt="",
                     font="Mononoki Nerd Font Propo"
                 ),
                 widget.Spacer(
-                    background="#191724",
+                    background="#11111b",
                     length=5),
                 widget.Clock(
-                    background="#191724",
-                    foreground="#ebbcba",
+                    background="#11111b",
+                    foreground="#a6e3a1",
                     format="%a %b %d, %I:%M %p"
                 ),
 
-                widget.Spacer(background="#191724", length=10),
+                widget.Spacer(background="#11111b", length=10),
             ],
             36,
-            background="#26233a",
+            background="#1e1e2e",
             # border_width=4,  # Draw top and bottom borders
             # border_color="#1e222a",
             margin=10,
@@ -414,8 +432,8 @@ floats_kept_above = True
 cursor_warp = False
 floating_layout = layout.Floating(
     border_width=2,
-    border_focus="#ebbcba",
-    border_normal="#191724",
+    border_focus="#f2cdcd",
+    border_normal="#1e1e2e",
     float_rules=[
         *layout.Floating.default_float_rules,
         Match(wm_class="Galculator"),
