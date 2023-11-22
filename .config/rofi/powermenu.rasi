@@ -6,13 +6,9 @@ configuration {
 /*****----- Global Properties -----*****/
 * {
   font:             "Mononoki Nerd Font Propo 22";
-  background:       #1f1d2eff;
-  background-alt:   #191724ff;
-  foreground:       #e0def4ff;
-  selected:         #ebbcbaff;
-  active:           #31748fff;
-  urgent:           #eb6f92ff;
 }
+
+@import 	    "colors/catppuccin-powermenu.rasi"
 
 /*
 USE_BUTTONS=YES
@@ -163,6 +159,6 @@ element-text {
     horizontal-align:            0.5;
 }
 element selected.normal {
-    background-color:            var(selected);
-    text-color:                  var(background);
+    background-color:            @selected;
+    text-color:                  @background;
 }

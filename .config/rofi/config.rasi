@@ -13,13 +13,9 @@ configuration {
 /*****----- Global Properties -----*****/
 * {
     font:           "RobotoMono Nerd Font Propo Medium 18";
-    background:     #1f1d2eFF;
-    background-alt: #191724FF;
-    foreground:     #e0def4FF;
-    selected:       #ebbcbaFF;
-    active:         #31748fFF;
-    urgent:         #eb6f92FF;
 }
+
+@import		    "colors/catppuccin.rasi"
 
 
 /*****----- Main Window -----*****/
