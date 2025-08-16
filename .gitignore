@@ -1,5 +1,3 @@
-# Create initial .gitignore
-cat > ~/.gitignore << 'EOF'
 # Sensitive files
 .ssh/
 .gnupg/
@@ -28,6 +26,9 @@ cat > ~/.gitignore << 'EOF'
 __pycache__/
 *.pyc
 *.pyo
+*.swp
+*.swo
+*~
 
 # Environment files
 .env
@@ -44,13 +45,39 @@ Desktop/
 Public/
 Templates/
 
-# Application specific (add more as needed)
+# Application specific
 .local/share/Steam/
 .local/share/lutris/
+.local/share/recently-used.xbel
+
+# .config exclusions - browsers and heavy apps
 .config/google-chrome/
 .config/chromium/
-EOF
+.config/BraveSoftware/
+.config/discord/
+.config/Slack/
+.config/Code/logs/
+.config/Code/CachedData/
 
-# Add the gitignore
-dotfiles add .gitignore
-dotfiles commit -m "Initial commit: Add comprehensive gitignore"
+# .config exclusions - system generated
+.config/pulse/
+.config/dconf/
+.config/fontconfig/
+.config/gconf/
+.config/ibus/
+.config/menus/
+.config/mimeapps.list
+.config/user-dirs.dirs
+.config/user-dirs.locale
+.config/Trolltech.conf
+.config/session/
+.config/autostart/
+
+# Large cache directories (catch-all patterns)
+.config/*/logs/
+.config/*/cache/
+.config/*/Cache/
+.config/*/CachedData/
+.config/*/blob_storage/
+.config/*/GPUCache/
+.config/*/Service Worker/
