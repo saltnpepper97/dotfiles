@@ -14,6 +14,7 @@ readonly WAL_TEMPLATE_DIR="${HOME}/.cache/wal"
 readonly KVTHEME_DIR="${KVANTUM_DIR}/${THEME}"
 readonly YAZI_CONFIG_DIR="${HOME}/.config/yazi/flavors/pywal.yazi"
 readonly MAKO_CONFIG_DIR="${HOME}/.config/mako"
+readonly ZATHURA_CONFIG_DIR="${HOME}/.config/zathura"
 
 # Functions
 log_error() {
@@ -67,6 +68,20 @@ setup_gtk_theme() {
     else
         log_error "GTK theme files not found (gtk.py or pywal.json)"
     fi
+}
+
+setup_zathura_theme() {
+    local source_file="${HOME}/.cache/wal/zathurarc"
+    local target_file="${ZATHURA_CONFIG_DIR}/zathurarc"
+    if [[ -f "$source_file" ]]; then
+        echo "Copying Zathura config"
+        mkdir -p "$ZATHURA_CONFIG_DIR"
+        cp "$source_file" "$target_file" || {
+            log_error "Failed to copy Zathura config"
+        }
+    else
+        log_error "Zathura config source file not found: $source_file"
+    fi 
 }
 
 setup_kvantum_theme() {
@@ -171,6 +186,7 @@ main() {
     setup_kvantum_theme
     setup_yazi_flavor
     setup_mako_config
+    setup_zathura_theme
     
     # Final delay and notification
     sleep "$SLEEP_FINAL"

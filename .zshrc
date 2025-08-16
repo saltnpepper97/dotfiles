@@ -64,6 +64,7 @@ plugins=(
     dirhistory
     history-substring-search
     starship
+    zoxide
 )
 
 source $ZSH/oh-my-zsh.sh

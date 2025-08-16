@@ -35,7 +35,8 @@ return {
         "rust_analyzer",
         "svelte",
         "zls",
-        "clangd"
+        "clangd",
+        "qmlls"
       },
       automatic_installation = true,
     })
@@ -43,17 +44,17 @@ return {
     -- Simple LSP Keybinds (attached when LSP starts)
     local function setup_keybinds(bufnr)
       local opts = { buffer = bufnr, noremap = true, silent = true }
-      
+
       -- Navigation
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)           -- Go to Definition
       vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)           -- Go to References
       vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)                 -- Hover info
-      
+
       -- Actions
       vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, opts)        -- Rename
       vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, opts)   -- Code Actions
       vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts)        -- Format
-      
+
       -- Diagnostics
       vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts) -- Show Error
       vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)         -- Next Error
@@ -62,7 +63,7 @@ return {
 
     -- LSP Capabilities
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
-    
+
     -- LSP Servers
     local lspconfig = require("lspconfig")
     local servers = {
@@ -74,9 +75,10 @@ return {
       "rust_analyzer",
       "svelte",
       "zls",
-      "clangd"
+      "clangd",
+      "qmlls"
     }
-    
+
     for _, server in ipairs(servers) do
       lspconfig[server].setup({
         capabilities = capabilities,
@@ -85,7 +87,7 @@ return {
         end,
       })
     end
-    
+
     -- nvim-cmp
     local cmp = require("cmp")
     local luasnip = require("luasnip")
