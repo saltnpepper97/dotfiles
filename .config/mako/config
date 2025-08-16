@@ -1,0 +1,43 @@
+sort=-time
+layer=overlay
+background-color=#111819
+width=400
+height=120
+border-size=2
+border-color=#c3c5c5
+text-color=#c3c5c5
+border-radius=6
+icons=1
+icon-path=/usr/share/icons/Boston
+max-icon-size=64
+default-timeout=5000
+ignore-timeout=1
+font=Maple Mono NF 14
+progress-color=over #786657
+
+[urgency=low]
+border-color=#5c6c70
+
+[urgency=normal]
+border-color=#4d6566
+
+[urgency=high]
+border-color=#786657
+default-timeout=0
+
+[category=mpd]
+default-timeout=2000
+group-by=category
+
+[app-name=notify-volume]
+layer=overlay
+history=0
+anchor=top-right
+# Group all volume notifications together
+group-by=app-name
+# Hide the group-index
+format=<b>%s</b>\n%b
+
+[app-name=volume group-index=0]
+# Only show last notification
+invisible=0

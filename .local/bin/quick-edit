@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+#
+# Quick Edit Selector using gum with pywal colors
+# This script presents a menu of config files to edit and opens the selected one
+
+# Load pywal colors if available
+COLORS_FILE="$HOME/.cache/wal/colors.json"
+if [[ -f "$COLORS_FILE" ]]; then
+    # Extract colors using jq
+    BACKGROUND=$(jq -r '.special.background' "$COLORS_FILE" 2>/dev/null)
+    FOREGROUND=$(jq -r '.special.foreground' "$COLORS_FILE" 2>/dev/null)
+    COLOR3=$(jq -r '.colors.color3' "$COLORS_FILE" 2>/dev/null)
+    COLOR7=$(jq -r '.colors.color7' "$COLORS_FILE" 2>/dev/null)
+    COLOR10=$(jq -r '.colors.color10' "$COLORS_FILE" 2>/dev/null)
+    COLOR13=$(jq -r '.colors.color13' "$COLORS_FILE" 2>/dev/null)
+    
+    # Set gum style flags with pywal colors
+    GUM_STYLE_FLAGS=(
+        --cursor.foreground="$FOREGROUND"
+        --cursor.background="$COLOR3"
+        --header.foreground="$COLOR10"
+        --header.background=""
+        --item.foreground="$COLOR7"
+        --item.background=""
+        --selected.foreground="$BACKGROUND"
+        --selected.background="$COLOR13"
+    )
+else
+    # Fallback colors if pywal isn't available
+    GUM_STYLE_FLAGS=(
+        --cursor.foreground="212"
+        --cursor.background=""
+        --header.foreground="99"
+        --header.background=""
+        --item.foreground=""
+        --item.background=""
+        --selected.foreground="212"
+        --selected.background=""
+    )
+fi
+
+# Define the options with display names and their corresponding file paths
+declare -A edit_options=(
+    ["🟦 Waybar Config"]="$HOME/.config/waybar/config.jsonc"
+    ["🎨 Waybar Style"]="$HOME/.config/waybar/style.css"
+    ["⚡ Neovim Config"]="$HOME/.config/nvim/init.lua"
+    ["🐚 Zsh Config"]="$HOME/.zshrc"
+    ["🐱 Kitty Config"]="$HOME/.config/kitty/kitty.conf"
+    ["🏠 Hyprland Config"]="$HOME/.config/hypr/hyprland.conf"
+    ["😴 Hypridle Config"]="$HOME/.config/hypr/hypridle.conf"
+    ["🔒 Hyprlock Config"]="$HOME/.config/hypr/hyprlock.conf"
+    ["🚀 Rofi Config"]="$HOME/.config/rofi/config.rasi"
+)
+
+# Create array of option names for gum choose
+options=()
+for option in "${!edit_options[@]}"; do
+    options+=("$option")
+done
+
+# Sort the options alphabetically
+IFS=$'\n' sorted_options=($(sort <<<"${options[*]}"))
+unset IFS
+
+# Use gum choose to select one option with pywal colors
+selected=$(printf '%s\n' "${sorted_options[@]}" | gum choose "${GUM_STYLE_FLAGS[@]}" --limit=1 --height=10 --header="Select a config file to edit:")
+
+# Exit if no selection was made
+if [ -z "$selected" ]; then
+    exit 0
+fi
+
+# Get the file path for the selected option
+file_path="${edit_options[$selected]}"
+
+# Use hyprctl to open the editor and close this window
+hyprctl dispatch exec "kitty --class=floating-editor nvim '$file_path'"
+hyprctl dispatch killactive

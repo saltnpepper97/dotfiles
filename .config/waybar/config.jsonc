@@ -1,0 +1,254 @@
+//
+//   ██╗    ██╗ █████╗ ██╗   ██╗██████╗  █████╗ ██████╗ 
+//   ██║    ██║██╔══██╗╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+//   ██║ █╗ ██║███████║ ╚████╔╝ ██████╔╝███████║██████╔╝
+//   ██║███╗██║██╔══██║  ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+//   ╚███╔███╔╝██║  ██║   ██║   ██████╔╝██║  ██║██║  ██║
+//    ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+//                                                  
+
+[
+  // Main Bar
+  {
+    "layer": "bottom",
+    "output": "DP-1",
+    "position": "top",
+    "spacing": 0,
+    "mode": "dock",
+    "margin": 8,
+    "start_hidden": false,
+    "fixed-center": true,
+    "name": "main",
+    "reload_style_on_change": true,
+
+
+    // Layout
+
+    "modules-left": [
+      "hyprland/workspaces"
+    ],
+    "modules-center": [],
+    "modules-right": [
+      "group/systray",
+      "custom/updates-icon",
+      "custom/updates",
+      "custom/separator",
+      "group/processor",
+      "custom/separator",
+      "custom/memory-icon",
+      "memory",
+      "custom/separator",
+      "group/internet",
+      "custom/separator",
+      "group/audio",
+      "clock" 
+    ],
+
+    // Groups
+    "group/audio": {
+      "orientation": "horizontal",
+      "modules": [
+        "pulseaudio",
+        "pulseaudio/slider"
+      ]
+    },
+
+    "group/processor": {
+      "orientation": "horizontal",
+      "modules": [
+        "custom/cpu-icon",
+        "cpu"
+      ]
+    },
+ 
+    "group/systray": {
+      "orientation": "horizontal",
+      "modules": [
+        "tray",
+        "custom/tray-separator"
+      ]
+    },
+
+    "group/internet": {
+      "orientation": "horizontal",
+      "modules": [
+        "custom/network-icon",
+        "network"
+      ]
+    },
+    
+    // Left Modules
+
+    "hyprland/workspaces": {
+      "format": "{icon}",
+      "format-icons": {
+        "active": "",
+        "empty": "",
+        "default": ""
+      },
+      "all-outputs": false,
+      "show-special": false
+    },
+
+    // Right Modules
+
+    "custom/tray-separator": {
+      "exec": "~/.config/waybar/scripts/tray-separator.sh"
+    },
+
+    "tray": {
+      "icon-size": 18,
+      "show-passive-items": false,
+      "reverse-direction": false,
+      "spacing": 8
+    },
+
+    "custom/updates": {
+        "format": "{}",
+        "exec": "~/.config/waybar/scripts/check-updates.sh",
+        "return-type": "json",
+        "interval": 3600,
+        "on-click": "kitty --class updates -e paru -Syu",
+        "signal": 8
+    },
+
+    "cpu": {
+      "format": "{usage}%",
+      "interval": 5,
+      "on-click": "kitty --class bottom -e btm",
+      "tooltip": false
+    },
+
+    "memory": {
+      "format": "{total}GiB",
+      "interval": 15,
+      "on-click": "kitty --class bottom -e btm",
+      "tooltip": false
+    },
+
+    "network": {
+      "format": "{ifname}",
+      "interval": 30,
+      "family": "ipv4",
+      "format-ethernet": "{ipaddr}",
+      "format-wifi": "{essid}",
+      "tooltip-format": "{ifname}",
+      "tooltip-format-ethernet": "{ifname}",
+      "max-length": 50,
+      "tooltip": false
+    },
+
+    "pulseaudio": {
+      "format": "{icon}",
+      "fomat-bluetooth": "{icon}",
+      "format-muted": "",
+      "format-icons": {
+        "alsa_output.pci-0000_31_00.4.analog-surround-21": "󰓃",
+        "alsa_output.usb-HP__Inc_HyperX_Cloud_III_Wireless_0000000000000000-00.analog-stereo": "󰋎",
+        "default": ["", ""]
+      },
+      "on-click": "pavucontrol -t 3",
+      "tooltip": false
+    },
+
+    "pulseaudio/slider": {
+      "min": 0,
+      "max": 100,
+      "orientation": "horizontal"
+    },
+
+    "clock": {
+        //"timezone": "America/Halifax",
+        "format": "{:%a %d %B, %I:%M %p}",
+        "tooltip": false
+    },
+
+    // Custom
+
+    "custom/updates-icon": {
+      "format": "󰏓",
+      "interval": "once",
+      "on-click": "kitty --class updates -e paru -Syu",
+      "tooltip": false
+    },
+
+    "custom/cpu-icon": {
+      "format": "",
+      "interval": "once",
+      "on-click": "kitty --class bottom -e btm",
+      "tooltip": false
+    },
+
+    "custom/memory-icon": {
+      "format": "",
+      "interval": "once",
+      "on-click": "kitty --class bottom -e btm",
+      "tooltip": false
+    },
+
+    "custom/network-icon": {
+        "exec": "~/.config/waybar/scripts/network-icon.sh",
+        "interval": 5
+    },
+
+    "custom/separator": {
+      "format": "|",
+      "interval": "once"
+    }
+  },
+
+  // Secondary Bar (second monitor)
+  {
+    "layer": "bottom",
+    "output": "DP-2",
+    "position": "top",
+    "spacing": 0,
+    "margin": 8,
+    "mode": "dock",
+    "start_hidden": false,
+    "fixed-center": true,
+    "name": "secondary",
+    "reload_style_on_change": true,
+
+    
+    // Layout
+
+    "modules-left": [
+      "hyprland/workspaces"
+    ],
+    "modules-center": [],
+    "modules-right": [
+      "clock"
+    ],
+
+    // Left Modules
+
+    "hyprland/workspaces": {
+      "format": "{icon}",
+      "format-icons": {
+        "active": "",
+        "empty": "",
+        "default": ""
+      },
+      "all-outputs": false,
+      "show-special": false
+    },
+
+    // Right Modules
+
+    "clock": {
+        // "timezone": "America/Halifax",
+        "format": "{:%a %d %B, %I:%M %p}",
+        "tooltip": false
+    },
+
+    // Custom
+
+    "custom/separator": {
+      "format": "|",
+      "interval": "once"
+    }
+  }
+]
+
+

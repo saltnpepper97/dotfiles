@@ -1,0 +1,183 @@
+#!/usr/bin/env bash
+
+set -euo pipefail  # Exit on error, undefined vars, pipe failures
+
+# Configuration
+readonly SLEEP_INITIAL=0.75
+readonly SLEEP_FINAL=0.5
+readonly THEME="pywal"
+readonly TEMPLATE="pywal"
+
+# Directories
+readonly KVANTUM_DIR="${HOME}/.config/Kvantum"
+readonly WAL_TEMPLATE_DIR="${HOME}/.cache/wal"
+readonly KVTHEME_DIR="${KVANTUM_DIR}/${THEME}"
+readonly YAZI_CONFIG_DIR="${HOME}/.config/yazi/flavors/pywal.yazi"
+readonly MAKO_CONFIG_DIR="${HOME}/.config/mako"
+
+# Functions
+log_error() {
+    echo "Error: $1" >&2
+}
+
+check_dependencies() {
+    local deps=("swww" "wal" "python3" "makoctl" "notify-send")
+    for dep in "${deps[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            log_error "$dep is not installed or not in PATH"
+            exit 1
+        fi
+    done
+}
+
+get_current_wallpaper() {
+    local wallpaper
+    wallpaper=$(swww query 2>/dev/null | head -1 | awk '{print $NF}') || {
+        log_error "Failed to get current wallpaper from swww"
+        exit 1
+    }
+    
+    if [[ -z "$wallpaper" ]]; then
+        log_error "No wallpaper found"
+        exit 1
+    fi
+    
+    echo "$wallpaper"
+}
+
+setup_pywal_theme() {
+    local wallpaper="$1"
+    
+    echo "Setting pywal theme for: $wallpaper"
+    wal -qn --cols16 darken -i "$wallpaper" || {
+        log_error "Failed to set pywal theme"
+        exit 1
+    }
+}
+
+setup_gtk_theme() {
+    local gtk_script="${HOME}/.local/bin/gtk.py"
+    local wal_json="${HOME}/.cache/wal/pywal.json"
+    
+    if [[ -f "$gtk_script" && -f "$wal_json" ]]; then
+        echo "Applying GTK theme"
+        python3 "$gtk_script" -f "$wal_json" -t ~/.config || {
+            log_error "Failed to apply GTK theme"
+        }
+    else
+        log_error "GTK theme files not found (gtk.py or pywal.json)"
+    fi
+}
+
+setup_kvantum_theme() {
+    echo "Setting up Kvantum theme"
+    
+    # Create kvantum theme directory if it doesn't exist
+    mkdir -p "$KVTHEME_DIR"
+    
+    local kvconfig_link="${KVTHEME_DIR}/${THEME}.kvconfig"
+    local svg_link="${KVTHEME_DIR}/${THEME}.svg"
+    local kvconfig_target="${WAL_TEMPLATE_DIR}/${TEMPLATE}.kvconfig"
+    local svg_target="${WAL_TEMPLATE_DIR}/${TEMPLATE}.svg"
+    
+    # Create symlinks if they don't exist and targets are available
+    for link_path in "$kvconfig_link" "$svg_link"; do
+        if [[ -L "$link_path" ]]; then
+            echo "Symlink already exists: $link_path"
+            continue
+        fi
+        
+        case "$link_path" in
+            *".kvconfig")
+                target="$kvconfig_target"
+                ;;
+            *".svg")
+                target="$svg_target"
+                ;;
+        esac
+        
+        if [[ -f "$target" ]]; then
+            ln -s "$target" "$link_path" || {
+                log_error "Failed to create symlink: $link_path"
+            }
+        else
+            log_error "Target file not found: $target"
+        fi
+    done
+}
+
+setup_yazi_flavor() {
+    local source_file="${HOME}/.cache/wal/yazi-flavor.toml"
+    local target_file="${YAZI_CONFIG_DIR}/flavor.toml"
+    
+    if [[ -f "$source_file" ]]; then
+        echo "Copying Yazi flavor"
+        mkdir -p "$YAZI_CONFIG_DIR"
+        cp "$source_file" "$target_file" || {
+            log_error "Failed to copy Yazi flavor"
+        }
+    else
+        log_error "Yazi flavor source file not found: $source_file"
+    fi
+}
+
+setup_mako_config() {
+    local source_file="${HOME}/.cache/wal/mako"
+    local target_file="${MAKO_CONFIG_DIR}/config"
+    
+    if [[ -f "$source_file" ]]; then
+        echo "Copying Mako config"
+        mkdir -p "$MAKO_CONFIG_DIR"
+        cp "$source_file" "$target_file" || {
+            log_error "Failed to copy Mako config"
+            return 1
+        }
+        
+        # Reload mako
+        makoctl reload || {
+            log_error "Failed to reload mako"
+        }
+    else
+        log_error "Mako config source file not found: $source_file"
+    fi
+}
+
+send_notification() {
+    local wallpaper="$1"
+    local wallpaper_name
+    wallpaper_name=$(basename "$wallpaper")
+    
+    notify-send "Theme Updated" "Wallpaper set to: $wallpaper_name" || {
+        log_error "Failed to send notification"
+    }
+}
+
+main() {
+    echo "Starting wallpaper theme setup..."
+    
+    # Initial delay
+    sleep "$SLEEP_INITIAL"
+    
+    # Check if required commands are available
+    check_dependencies
+    
+    # Get current wallpaper
+    local wallpaper
+    wallpaper=$(get_current_wallpaper)
+    
+    # Set up themes
+    setup_pywal_theme "$wallpaper"
+    setup_gtk_theme
+    setup_kvantum_theme
+    setup_yazi_flavor
+    setup_mako_config
+    
+    # Final delay and notification
+    sleep "$SLEEP_FINAL"
+    send_notification "$wallpaper"
+    
+    echo "Theme setup completed successfully!"
+}
+
+# Run main function
+main "$@"

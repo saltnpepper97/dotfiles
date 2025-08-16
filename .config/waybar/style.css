@@ -1,0 +1,180 @@
+/*
+   ██╗    ██╗ █████╗ ██╗   ██╗██████╗  █████╗ ██████╗      ██╗███████╗████████╗██╗   ██╗██╗     ███████╗██╗ 
+   ██║    ██║██╔══██╗╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗    ██╔╝██╔════╝╚══██╔══╝╚██╗ ██╔╝██║     ██╔════╝╚██╗
+   ██║ █╗ ██║███████║ ╚████╔╝ ██████╔╝███████║██████╔╝    ██║ ███████╗   ██║    ╚████╔╝ ██║     █████╗   ██║
+   ██║███╗██║██╔══██║  ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗    ██║ ╚════██║   ██║     ╚██╔╝  ██║     ██╔══╝   ██║
+   ╚███╔███╔╝██║  ██║   ██║   ██████╔╝██║  ██║██║  ██║    ╚██╗███████║   ██║      ██║   ███████╗███████╗██╔╝
+    ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝     ╚═╝╚══════╝   ╚═╝      ╚═╝   ╚══════╝╚══════╝╚═╝ 
+*/                                                                                                         
+
+@import '/home/dustin/.cache/wal/colors-waybar.css';
+
+* {
+    font-family: Symbols Nerd Font, Maple Mono NF, sans-serif;
+    font-size: 14px;
+}
+
+window#waybar {
+    background-color: alpha(@background, 0.85);
+    color: @foreground;
+    transition-property: background-color;
+    transition-duration: .5s;
+    border-radius: 8px;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+window#waybar > box {
+    padding: 6px 10px;
+}
+
+#workspaces button {
+    background-color: transparent;
+    color: alpha(@color7, 0.4);
+    margin: 0 3px;
+    padding: 5px 10px;
+}
+
+#workspaces button.active {
+    color: alpha(@color2, 0.6);
+}
+
+
+#workspaces button.empty {
+    color: alpha(@color7, 0.4);
+}
+
+#workspaces button:hover {
+    box-shadow: inherit;
+    text-shadow: inherit;
+    transition: all 0.2s ease;
+    background-color: alpha(@color4, 0.4);
+}
+
+
+button {
+    border: none;
+}
+
+button:hover {
+    background: inherit;
+}
+
+#tray,
+#custom-updates,
+#cpu,
+#memory,
+#network,
+#clock {
+    padding: 6px 12px;
+    margin: 0 2px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+#tray {
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray menu {
+    background-color: @background;
+    color: @color6;
+    border: 1px solid alpha(@color8, 0.3);
+    border-radius: 6px;
+    padding: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    min-width: 150px;
+}
+
+#tray menu menuitem {
+    background-color: transparent;
+    color: @color6;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+#tray menu menuitem:hover {
+    background-color: alpha(@color2, 0.5);
+    color: @foreground;
+    box-shadow: 0 1px 3px alpha(@color4, 0.2);
+}
+
+#tray menu menuitem:selected,
+#tray menu menuitem:active {
+    background-color: alpha(@color4, 0.4);
+    color: @foreground;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: #eb4d4b;
+    border-radius: 4px;
+}
+
+#custom-separator,
+#custom-tray-separator {
+    color: alpha(@color8, 0.6);
+}
+
+#custom-updates-icon,
+#custom-cpu-icon,
+#custom-memory-icon,
+#custom-network-icon,
+#pulseaudio {
+    color: @color4;
+    padding-left: 10px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+
+
+#pulseaudio.muted {
+    color: alpha(@color8, 0.8);
+}
+
+#pulseaudio-slider slider {
+    min-height: 0px;
+    min-width: 0px;
+    background-color: transparent;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+}
+
+#pulseaudio-slider trough {
+    min-height: 12px;
+    min-width: 100px;
+    border-radius: 6px;
+    border: 0;
+    background-color: alpha(@color0, 0.8);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+#pulseaudio-slider highlight {
+    min-width: 10px;
+    border-radius: 6px;
+    border: 0;
+    background-color: alpha(@color3, 0.9);
+    box-shadow: 0 1px 3px alpha(@color3, 0.4);
+}
+
+#clock {
+    color: @foreground;
+    background-color: alpha(@color4, 0.8);
+    border-radius: 6px;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px alpha(@color4, 0.3);
+}
+
+#clock:hover {
+    background-color: alpha(@color4, 0.9);
+}
+
+

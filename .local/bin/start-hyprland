@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd ~
+
+exec dbus-run-session -- Hyprland > /dev/null 2>&1
