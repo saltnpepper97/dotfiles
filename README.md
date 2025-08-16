@@ -1,15 +1,15 @@
 # 🏠 Dotfiles
 
-![Arch Linux](https://img.shields.io/badge/Arch%20Linux-1793D1?style=flat&logo=arch-linux&logoColor=white)
-![Hyprland](https://img.shields.io/badge/Hyprland-58E1FF?style=flat&logo=wayland&logoColor=white)
-![Neovim](https://img.shields.io/badge/Neovim-57A143?style=flat&logo=neovim&logoColor=white)
-![Kitty](https://img.shields.io/badge/Kitty-000000?style=flat&logo=gnometerminal&logoColor=white)
-![Python](https://img.shields.io/badge/Pywal-3776AB?style=flat&logo=python&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white)
-![Wayland](https://img.shields.io/badge/Wayland-FFBC00?style=flat&logo=wayland&logoColor=black)
-![Last Commit](https://img.shields.io/github/last-commit/yourusername/dotfiles?style=flat&color=blue)
-![License](https://img.shields.io/github/license/yourusername/dotfiles?style=flat&color=green)
-![Stars](https://img.shields.io/github/stars/yourusername/dotfiles?style=flat&color=yellow)
+![Arch Linux](https://img.shields.io/badge/Arch%20Linux-1793D1?style=for-the-badge&logo=arch-linux&logoColor=white)
+![Hyprland](https://img.shields.io/badge/Hyprland-58E1FF?style=for-the-badge&logo=wayland&logoColor=white)
+![Neovim](https://img.shields.io/badge/Neovim-57A143?style=for-the-badge&logo=neovim&logoColor=white)
+![Kitty](https://img.shields.io/badge/Kitty-000000?style=for-the-badge&logo=gnometerminal&logoColor=white)
+![Python](https://img.shields.io/badge/Pywal-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![Wayland](https://img.shields.io/badge/Wayland-FFBC00?style=for-the-badge&logo=wayland&logoColor=black)
+![Last Commit](https://img.shields.io/github/last-commit/yourusername/dotfiles?style=for-the-badge&color=ffb4a2&labelColor=201a19)
+![License](https://img.shields.io/github/license/yourusername/dotfiles?style=for-the-badge&color=ffb4a2&labelColor=201a19)
+![Stars](https://img.shields.io/github/stars/yourusername/dotfiles?style=for-the-badge&color=ffb4a2&labelColor=201a19)
 
 My personal dotfiles for a modern Linux desktop setup featuring Hyprland, pywal theming, and automated wallpaper management.
 
