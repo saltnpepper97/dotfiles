@@ -81,3 +81,4 @@ Templates/
 .config/*/blob_storage/
 .config/*/GPUCache/
 .config/*/Service Worker/
+README.md
