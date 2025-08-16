@@ -7,9 +7,9 @@
 ![Python](https://img.shields.io/badge/Pywal-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![Wayland](https://img.shields.io/badge/Wayland-FFBC00?style=for-the-badge&logo=wayland&logoColor=black)
-![Last Commit](https://img.shields.io/github/last-commit/saltnpepper97/dotfiles?style=for-the-badge&color=ffb4a2&labelColor=201a19)
-![License](https://img.shields.io/github/license/saltnpepper97/dotfiles?style=for-the-badge&color=ffb4a2&labelColor=201a19)
-![Stars](https://img.shields.io/github/stars/saltnpepper97/dotfiles?style=for-the-badge&color=ffb4a2&labelColor=201a19)
+![Last Commit](https://img.shields.io/github/last-commit/saltnpepper97/dotfiles?style=for-the-badge&color=7B68EE&labelColor=2F1B69)
+![License](https://img.shields.io/github/license/saltnpepper97/dotfiles?style=for-the-badge&color=FF6B9D&labelColor=8B1538)
+![Stars](https://img.shields.io/github/stars/saltnpepper97/dotfiles?style=for-the-badge&color=FFD93D&labelColor=B8860B)
 
 My personal dotfiles for a modern Linux desktop setup featuring Hyprland, pywal theming, and automated wallpaper management.
 
