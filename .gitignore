@@ -1,0 +1,56 @@
+# Create initial .gitignore
+cat > ~/.gitignore << 'EOF'
+# Sensitive files
+.ssh/
+.gnupg/
+.password-store/
+*.pem
+*.key
+*_rsa
+*_dsa
+*_ecdsa
+*_ed25519
+
+# History and logs
+*history
+*.log
+.bash_history
+.zsh_history
+.python_history
+
+# Cache and temporary files
+.cache/
+.local/share/Trash/
+.thumbnails/
+.mozilla/
+.thunderbird/
+.vscode/logs/
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Large directories that shouldn't be tracked
+Downloads/
+Documents/
+Pictures/
+Videos/
+Music/
+Desktop/
+Public/
+Templates/
+
+# Application specific (add more as needed)
+.local/share/Steam/
+.local/share/lutris/
+.config/google-chrome/
+.config/chromium/
+EOF
+
+# Add the gitignore
+dotfiles add .gitignore
+dotfiles commit -m "Initial commit: Add comprehensive gitignore"
