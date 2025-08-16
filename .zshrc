@@ -122,6 +122,7 @@ alias mv="mv -iv"                  # interactive move
 alias ln="ln -iv"                  # interactive link
 alias mkdir="mkdir -pv"            # create parent dirs and be verbose
 alias y="yazi"                     # yazi file manager
+alias bin="cd ~/.local/bin; clear; eza --icons -l"
 
 # Code Editor
 alias nv="nvim"
@@ -219,4 +220,5 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
+
 
