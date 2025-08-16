@@ -2,4 +2,4 @@
 
 cd ~
 
-exec dbus-run-session -- Hyprland > /dev/null 2>&1
+exec dbus-run-session -- Hyprland > ~/.cache/hyprland.log 2>&1

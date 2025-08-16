@@ -171,7 +171,7 @@ alias rmf="/bin/rm -rf"     # real rm when you need it
 
 # Pacman & Paru Package Managers
 alias pi="paru -S"          # install package(s)
-alias ps="paru -Ss"         # search packages
+alias pq="paru -Ss"         # search packages
 alias pu="paru -Su"         # update all packages
 alias pr="paru -R"          # remove package(s)
 alias pra="paru -Rns"       # remove package(s) recursively
