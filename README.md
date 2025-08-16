@@ -1,11 +1,15 @@
 # 🏠 Dotfiles
 
-![Linux](https://img.shields.io/badge/OS-Linux-blue?logo=linux&logoColor=white)
-![Hyprland](https://img.shields.io/badge/WM-Hyprland-58E1FF?logo=wayland&logoColor=white)
-![Neovim](https://img.shields.io/badge/Editor-Neovim-57A143?logo=neovim&logoColor=white)
-![Kitty](https://img.shields.io/badge/Terminal-Kitty-000000?logo=gnome-terminal&logoColor=white)
-![Pywal](https://img.shields.io/badge/Theme-Pywal-FF6B6B?logo=python&logoColor=white)
-![Git](https://img.shields.io/badge/Managed%20with-Git-F05032?logo=git&logoColor=white)
+![Arch Linux](https://img.shields.io/badge/Arch%20Linux-1793D1?style=flat&logo=arch-linux&logoColor=white)
+![Hyprland](https://img.shields.io/badge/Hyprland-58E1FF?style=flat&logo=wayland&logoColor=white)
+![Neovim](https://img.shields.io/badge/Neovim-57A143?style=flat&logo=neovim&logoColor=white)
+![Kitty](https://img.shields.io/badge/Kitty-000000?style=flat&logo=gnometerminal&logoColor=white)
+![Python](https://img.shields.io/badge/Pywal-3776AB?style=flat&logo=python&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white)
+![Wayland](https://img.shields.io/badge/Wayland-FFBC00?style=flat&logo=wayland&logoColor=black)
+![Last Commit](https://img.shields.io/github/last-commit/yourusername/dotfiles?style=flat&color=blue)
+![License](https://img.shields.io/github/license/yourusername/dotfiles?style=flat&color=green)
+![Stars](https://img.shields.io/github/stars/yourusername/dotfiles?style=flat&color=yellow)
 
 My personal dotfiles for a modern Linux desktop setup featuring Hyprland, pywal theming, and automated wallpaper management.
 
@@ -125,11 +129,11 @@ dotfiles push
 
 | Binding | Action |
 |---------|---------|
-| `Super + Return` | Launch terminal |
-| `Super + D` | Application launcher |
-| `Super + Q` | Close window |
-| `Super + F` | Toggle fullscreen |
-| `Super + Space` | Toggle floating |
+| `Super + Return` | Launch terminal `kitty` |
+| `Super + R` | Application launcher `rofi` |
+| `Super + C` | Close window |
+| `Super + F` | Toggle floating |
+| `Super + E` | Open Quick Edits (custom script) |
 
 *See `.config/hypr/hyprland.conf` for complete keybindings*
 
@@ -137,7 +141,6 @@ dotfiles push
 
 | Script | Description |
 |--------|-------------|
-| `wal-set` | Set wallpaper and update all themes |
 | `check-updates` | Check for system updates |
 | `gtk.py` | Apply GTK themes from pywal |
 | `reload-waybar` | Restart waybar with new config |
