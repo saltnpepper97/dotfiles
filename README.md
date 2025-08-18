@@ -1,12 +1,9 @@
 # 🏠 Dotfiles
 
 ![Arch Linux](https://img.shields.io/badge/Arch%20Linux-1793D1?style=for-the-badge&logo=arch-linux&logoColor=white)
-![Hyprland](https://img.shields.io/badge/Hyprland-58E1FF?style=for-the-badge&logo=wayland&logoColor=white)
+![Hyprland](https://img.shields.io/badge/Hyprland-6A0DAD?style=for-the-badge&logo=hyprland&logoColor=white)
 ![Neovim](https://img.shields.io/badge/Neovim-57A143?style=for-the-badge&logo=neovim&logoColor=white)
-![Kitty](https://img.shields.io/badge/Kitty-000000?style=for-the-badge&logo=gnometerminal&logoColor=white)
 ![Python](https://img.shields.io/badge/Pywal-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
-![Wayland](https://img.shields.io/badge/Wayland-FFBC00?style=for-the-badge&logo=wayland&logoColor=black)
 ![Last Commit](https://img.shields.io/github/last-commit/saltnpepper97/dotfiles?style=for-the-badge&color=7B68EE&labelColor=2F1B69)
 ![License](https://img.shields.io/github/license/saltnpepper97/dotfiles?style=for-the-badge&color=FF6B9D&labelColor=8B1538)
 ![Stars](https://img.shields.io/github/stars/saltnpepper97/dotfiles?style=for-the-badge&color=FFD93D&labelColor=B8860B)
@@ -36,7 +33,7 @@ The setup uses pywal to generate color schemes from wallpapers and automatically
 - Neovim colorscheme
 - Yazi file manager
 
-## 📱 Screenshots
+## 📷 Screenshots
 
 ***todo***
 
@@ -136,14 +133,6 @@ dotfiles push
 | `Super + E` | Open Quick Edits (custom script) |
 
 *See `.config/hypr/hyprland.conf` for complete keybindings*
-
-## 📦 Scripts
-
-| Script | Description |
-|--------|-------------|
-| `check-updates` | Check for system updates |
-| `gtk.py` | Apply GTK themes from pywal |
-| `reload-waybar` | Restart waybar with new config |
 
 ## 🔧 Customization
 
