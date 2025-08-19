@@ -108,8 +108,10 @@
         "exec": "~/.config/waybar/scripts/check-updates.sh",
         "return-type": "json",
         "interval": 3600,
-        "on-click": "kitty --class updates -e paru -Syu",
-        "signal": 8
+        "on-click": "kitty --class updates -e bash -c 'paru -Syu; read -p \"Press Enter to close...\"'",
+        "on-click-right": "pkill -RTMIN+8 waybar",
+        "signal": 8,
+        "tooltip": true
     },
 
     "cpu": {
