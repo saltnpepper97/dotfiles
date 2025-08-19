@@ -170,6 +170,7 @@ configs=(
     $'📋 Rules\t'"$HOME/.config/hypr/configs/rules.conf"
     $'📦 Variables\t'"$HOME/.config/hypr/configs/variables.conf"
     $'🚀 Rofi Config\t'"$HOME/.config/rofi/config.rasi"
+    $'🔌 Power Menu Config\t'"$HOME/.config/rofi/powermenu.rasi"''
 )
 
 # Use fzf to select with preview pane

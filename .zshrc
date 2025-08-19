@@ -172,13 +172,12 @@ alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 # Pacman & Paru
 alias pi="paru -S"               # install package(s)
 alias pq="paru -Ss"              # search packages
-alias pu="paru -Su"              # update packages
+alias pu="paru -Syu"             # update packages
 alias pr="paru -R"               # remove package(s)
 alias pra="paru -Rns"            # remove with dependencies
 alias psc="paru -Sc"             # clean cache
 alias pl="paru -Ql"              # list package files
 alias pinfo="paru -Qi"           # package info
-alias pfu="paru -Syu"            # full system upgrade
 alias pau="paru -Sua"            # upgrade AUR packages only
 alias po="paru -Qtdq"            # list orphaned packages
 
