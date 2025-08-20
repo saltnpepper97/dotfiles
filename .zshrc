@@ -129,7 +129,7 @@ alias bin="cd ~/.local/bin; clear; eza --icons -l"
 alias rm="echo 'Use trash-put instead of rm, or use /bin/rm for real deletion'"
 alias tp="trash-put"
 alias tl="trash-list"
-alias tr="trash-restore"
+alias tf="trash-restore"
 alias te="trash-empty"
 alias rmf="/bin/rm -rf"          # real rm when needed
 

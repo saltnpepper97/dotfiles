@@ -1,0 +1,140 @@
+/*****----- Configuration -----*****/
+configuration {
+    show-icons:                 false;
+}
+
+/*****----- Global Properties -----*****/
+@import "~/.cache/wal/colors-rofi-dark.rasi"
+
+/*****----- Main Window -----*****/
+window {
+    transparency:                "real";
+    location:                    east;
+    anchor:                      center;
+    fullscreen:                  false;
+    width:                       165px;
+    height:                      680px;
+    x-offset:                    -25px;
+    y-offset:                    0px;
+    margin:                      0px;
+    padding:                     0px;
+    border:                      2px solid;
+    border-radius:               10px;
+    border-color:                @urgent-background;
+    cursor:                      "default";
+    background-color:            @background;
+}
+
+/*****----- Main Box -----*****/
+mainbox {
+    enabled:                     true;
+    spacing:                     10px;
+    margin:                      0px;
+    padding:                     20px;
+    background-color:            transparent;
+    children:                    [ "listview" ];
+}
+
+/*****----- Inputbar -----*****/
+textbox-prompt-colon {
+    enabled:                     true;
+    expand:                      false;
+    str:                         "";
+    padding:                     8px 12px;
+    border-radius:               5px;
+    background-color:            @urgent-background;
+    text-color:                  @urgent-foreground;
+    font:                        "feather 16";
+}
+
+prompt {
+    enabled:                     true;
+    padding:                     8px 12px;
+    border-radius:               5px;
+    background-color:            @active-background;
+    text-color:                  @active-foreground;
+    font:                        "Maple Mono NF 14";
+}
+
+/*****----- Listview -----*****/
+listview {
+    enabled:                     true;
+    columns:                     1;
+    lines:                       5;
+    cycle:                       true;
+    dynamic:                     true;
+    scrollbar:                   false;
+    layout:                      vertical;
+    reverse:                     false;
+    fixed-height:                true;
+    fixed-columns:               true;
+
+    spacing:                     10px;
+    margin:                      0px;
+    padding:                     0px;
+    border:                      0px solid;
+    background-color:            transparent;
+    text-color:                  @foreground;
+    cursor:                      "default";
+}
+
+/*****----- Elements -----*****/
+element {
+    enabled:                     true;
+    padding:                     30px 30px;
+    border:                      0px solid;
+    border-radius:               8px;
+    text-color:                  @foreground;
+    cursor:                      pointer;
+}
+
+element-text {
+    font:                        "feather regular 32";
+    background-color:            transparent;
+    text-color:                  inherit;
+    vertical-align:              0.5;
+    horizontal-align:            0.5;
+}
+
+/* Normal state */
+element normal.normal,
+element alternate.normal {
+    background-color:            @normal-background;
+    text-color:                  @normal-foreground;
+    border-color:                transparent;
+}
+
+/* Urgent state */
+element normal.urgent,
+element alternate.urgent {
+    background-color:            @urgent-background;
+    text-color:                  @urgent-foreground;
+    border-color:                @urgent-background;
+}
+
+/* Active state */
+element normal.active,
+element alternate.active {
+    background-color:            @active-background;
+    text-color:                  @active-foreground;
+    border-color:                @active-background;
+}
+
+/* Selected states using your new selected-* colors */
+element selected.normal {
+    background-color:            @selected-normal-background;
+    text-color:                  @selected-normal-foreground;
+    border-color:                @selected-normal-background;
+}
+
+element selected.active {
+    background-color:            @selected-active-background;
+    text-color:                  @selected-active-foreground;
+    border-color:                @selected-active-background;
+}
+
+element selected.urgent {
+    background-color:            @selected-urgent-background;
+    text-color:                  @selected-urgent-foreground;
+    border-color:                @selected-urgent-background;
+}

@@ -108,7 +108,7 @@
         "exec": "~/.config/waybar/scripts/check-updates.sh",
         "return-type": "json",
         "interval": 3600,
-        "on-click": "kitty --class updates -e bash -c 'paru -Syu; read -p \"Press Enter to close...\"'",
+        "on-click": "kitty --class updates -e bash -c 'paru -Syu; read -p \"Press Enter to close...\"'; ~/.config/waybar/scripts/check-updates.sh force",
         "on-click-right": "pkill -RTMIN+8 waybar",
         "signal": 8,
         "tooltip": true
@@ -122,7 +122,7 @@
     },
 
     "memory": {
-      "format": "{total}GiB",
+      "format": "{used}GiB",
       "interval": 15,
       "on-click": "kitty --class bottom -e btm",
       "tooltip": false
@@ -190,7 +190,8 @@
 
     "custom/network-icon": {
         "exec": "~/.config/waybar/scripts/network-icon.sh",
-        "interval": 5
+        "interval": 5,
+        "tooltip": false
     },
 
     "custom/separator": {

@@ -16,6 +16,10 @@ configuration {
 	drun-display-format:        "{name} [<span weight='light' size='small'><i>({generic})</i></span>]";
 	window-format:              "{w} · {c} · {t}";
     font:                       "Maple Mono NF 12";
+    timeout {
+        delay:  10;
+        action: "kb-cancel";
+    }
 }
 
 /*****----- Global Properties -----*****/
