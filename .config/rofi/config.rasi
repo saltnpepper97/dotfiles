@@ -15,7 +15,7 @@ configuration {
     display-drun:               "drun";
 	drun-display-format:        "{name} [<span weight='light' size='small'><i>({generic})</i></span>]";
 	window-format:              "{w} · {c} · {t}";
-    font:                       "Maple Mono NF 12";
+    font:                       "Departure Mono 12";
     timeout {
         delay:  10;
         action: "kb-cancel";
@@ -41,7 +41,7 @@ window {
     enabled:                     true;
     margin:                      0px;
     padding:                     0px;
-    border:                      1px solid;
+    border:                      3px solid;
     border-radius:               6px;
     border-color:                @selected-urgent-background;
     cursor:                      "default";

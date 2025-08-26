@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Tab</title>
+    <link rel="stylesheet" href="file:///home/dustin/.cache/wal/colors.css">
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css"
+    />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        i {
+            font-size: 32px;
+            color: var(--color3);
+        }
+
+        body {
+            font-family: 'Departure Mono', sans-serif;
+            background: linear-gradient(135deg, var(--color3) 0%, var(--color5) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--foreground);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .search-container {
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 600px;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            background: color-mix(in srgb, var(--color0) 30%, transparent);
+            backdrop-filter: blur(10px);
+            color: var(--foreground);
+            outline: none;
+            transition: all 0.3s ease;
+            border: 2px solid color-mix(in srgb, var(--color8) 50%, transparent);
+        }
+
+        .search-box::placeholder {
+            color: color-mix(in srgb, var(--foreground) 70%, transparent);
+        }
+
+        .search-box:focus {
+            background: color-mix(in srgb, var(--color0) 50%, transparent);
+            border-color: var(--color4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px color-mix(in srgb, var(--color0) 50%, transparent);
+        }
+
+        .bookmarks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+        }
+
+        .bookmark-card {
+            background: color-mix(in srgb, var(--color0) 30%, transparent);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid color-mix(in srgb, var(--color8) 30%, transparent);
+            cursor: pointer;
+        }
+
+        .bookmark-card:hover {
+            transform: translateY(-5px);
+            background: color-mix(in srgb, var(--color0) 50%, transparent);
+            box-shadow: 0 10px 30px color-mix(in srgb, var(--color0) 60%, transparent);
+            border-color: var(--color4);
+        }
+
+        .bookmark-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .bookmark-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .bookmark-url {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            word-break: break-all;
+        }
+
+        .bookmark-card a {
+            color: var(--foreground);
+            text-decoration: none;
+            display: block;
+        }
+
+        .time {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.8;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .bookmarks {
+                grid-template-columns: 1fr;
+            }
+            
+            .time {
+                position: static;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="time" id="time"></div>
+    
+    <div class="container">
+      <h1>Welcome Back, Dustin</h1>
+        
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="Search the web..." id="searchBox">
+        </div>
+        
+        <div class="bookmarks">
+            <div class="bookmark-card">
+                <a href="https://github.com">
+                    <span class="bookmark-icon"><i class="ph ph-github-logo"></i></span>
+                    <div class="bookmark-title">GitHub</div>
+                    <div class="bookmark-url">github.com</div>
+                </a>
+            </div>
+            
+            <div class="bookmark-card">
+                <a href="https://reddit.com">
+                    <span class="bookmark-icon"><i class="ph ph-reddit-logo"></i></span>
+                    <div class="bookmark-title">Reddit</div>
+                    <div class="bookmark-url">reddit.com</div>
+                </a>
+            </div>
+            
+            <div class="bookmark-card">
+                <a href="https://news.ycombinator.com">
+                    <span class="bookmark-icon"><i class="ph ph-newspaper-clipping"></i></span>
+                    <div class="bookmark-title">Hacker News</div>
+                    <div class="bookmark-url">news.ycombinator.com</div>
+                </a>
+            </div>
+            
+            <div class="bookmark-card">
+                <a href="https://youtube.com">
+                    <span class="bookmark-icon"><i class="ph ph-youtube-logo"></i></span>
+                    <div class="bookmark-title">Youtube</div>
+                    <div class="bookmark-url">youtube.com</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('time').textContent = timeString;
+        }
+
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Search functionality
+        const searchBox = document.getElementById('searchBox');
+        searchBox.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value.trim();
+                if (query) {
+                    // Check if it's a URL
+                    if (query.includes('.') && !query.includes(' ')) {
+                        // Add protocol if missing
+                        const url = query.startsWith('http') ? query : 'https://' + query;
+                        window.location.href = url;
+                    } else {
+                        // Search with Google
+                        window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+                    }
+                }
+            }
+        });
+
+        // Focus search box on page load
+        window.addEventListener('load', () => {
+            searchBox.focus();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Focus search with Ctrl+L or Cmd+L
+            if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+                e.preventDefault();
+                searchBox.focus();
+                searchBox.select();
+            }
+        });
+    </script>
+</body>
+</html>

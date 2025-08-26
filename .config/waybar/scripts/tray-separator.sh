@@ -5,8 +5,7 @@
 tray_apps=(
     "blueman-applet" 
     "steam"
-    "discord"
-    "spotify"
+    "obs"
 )
 
 get_tray_state() {

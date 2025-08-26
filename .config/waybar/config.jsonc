@@ -108,7 +108,7 @@
         "exec": "~/.config/waybar/scripts/check-updates.sh",
         "return-type": "json",
         "interval": 3600,
-        "on-click": "kitty --class updates -e bash -c 'paru -Syu; read -p \"Press Enter to close...\"'; ~/.config/waybar/scripts/check-updates.sh force",
+        "on-click": "~/.config/waybar/scripts/run-updates.sh",
         "on-click-right": "pkill -RTMIN+8 waybar",
         "signal": 8,
         "tooltip": true
@@ -117,14 +117,14 @@
     "cpu": {
       "format": "{usage}%",
       "interval": 5,
-      "on-click": "kitty --class bottom -e btm",
+      "on-click": "~/.config/waybar/scripts/system-monitor.sh",
       "tooltip": false
     },
 
     "memory": {
       "format": "{used}GiB",
       "interval": 15,
-      "on-click": "kitty --class bottom -e btm",
+      "on-click": "~/.config/waybar/scripts/system-monitor.sh",
       "tooltip": false
     },
 
@@ -170,21 +170,21 @@
     "custom/updates-icon": {
       "format": "󰏓",
       "interval": "once",
-      "on-click": "kitty --class updates -e paru -Syu",
+      "on-click": "~/.config/waybar/scripts/run-updates.sh",
       "tooltip": false
     },
 
     "custom/cpu-icon": {
       "format": "",
       "interval": "once",
-      "on-click": "kitty --class bottom -e btm",
+      "on-click": "~/.config/waybar/scripts/system-monitor.sh",
       "tooltip": false
     },
 
     "custom/memory-icon": {
       "format": "",
       "interval": "once",
-      "on-click": "kitty --class bottom -e btm",
+      "on-click": "~/.config/waybar/scripts/system-monitor.sh",
       "tooltip": false
     },
 

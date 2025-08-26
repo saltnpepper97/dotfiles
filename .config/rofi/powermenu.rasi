@@ -12,7 +12,7 @@
 /*****----- Configuration -----*****/
 configuration {
     show-icons:                 false;
-    font:                       "Maple Mono NF 14";
+    font:                       "Departure Mono 14";
 }
 
 /*****----- Global Properties -----*****/
@@ -37,7 +37,7 @@ window {
     enabled:                     true;
     margin:                      0px;
     padding:                     0px;
-    border:                      2px solid;
+    border:                      3px solid;
     border-radius:               8px;
     cursor:                      "default";
     border-color:                @selected-active-background;
@@ -92,7 +92,7 @@ message {
     enabled:                     true;
     margin:                      0px;
     padding:                     12px;
-    border:                      0px solid;
+    border:                      3px solid;
     border-radius:               15px 5px 15px 5px;
 }
 textbox {

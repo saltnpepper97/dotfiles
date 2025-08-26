@@ -110,11 +110,6 @@ setup_spicetify_theme() {
             return 1
         }
         
-        spicetify apply || {
-            log_error "Failed to apply Spicetify changes"
-            return 1
-        }
-        
         echo "Spicetify theme applied successfully"
     else
         log_error "Spicetify color source file not found: $source_file"
@@ -195,6 +190,20 @@ setup_mako_config() {
     fi
 }
 
+setup_qutebrowser_theme() {
+    echo "Checking qutebrowser status"
+    
+    # Check if qutebrowser is running
+    if pgrep -x "qutebrowser" > /dev/null; then
+        echo "Qutebrowser is running, applying theme"
+        qutebrowser --target window :config-source || {
+            log_error "Failed to reload qutebrowser config"
+        }
+    else
+        echo "Qutebrowser is not running, skipping theme application"
+    fi
+}
+
 send_notification() {
     local wallpaper="$1"
     local wallpaper_name
@@ -226,10 +235,11 @@ main() {
     setup_mako_config
     setup_zathura_theme
     setup_spicetify_theme
+    setup_qutebrowser_theme
     
     # Final delay and notification
     sleep "$SLEEP_FINAL"
-    pkill waypaper
+    #pkill waypaper
     send_notification "$wallpaper"
     
     echo "Theme setup completed successfully!"

@@ -65,21 +65,61 @@ create_file_if_missing() {
     fi
 }
 
+# Function to convert hex color to ANSI RGB
+hex_to_ansi() {
+    local hex_color="$1"
+    local fallback="$2"
+    
+    # Check if hex_color is valid (starts with # and has 6 hex digits)
+    if [[ "$hex_color" =~ ^#[0-9a-fA-F]{6}$ ]]; then
+        local r=$((16#${hex_color:1:2}))
+        local g=$((16#${hex_color:3:2}))
+        local b=$((16#${hex_color:5:2}))
+        echo "\033[38;2;${r};${g};${b}m"
+    else
+        echo "$fallback"
+    fi
+}
+
 # Create a temporary preview script
 PREVIEW_SCRIPT=$(mktemp)
 cat > "$PREVIEW_SCRIPT" << 'EOF'
 #!/bin/bash
 file_path="$1"
 
+# Function to convert hex color to ANSI RGB
+hex_to_ansi() {
+    local hex_color="$1"
+    local fallback="$2"
+    
+    # Check if hex_color is valid (starts with # and has 6 hex digits)
+    if [[ "$hex_color" =~ ^#[0-9a-fA-F]{6}$ ]]; then
+        local r=$((16#${hex_color:1:2}))
+        local g=$((16#${hex_color:3:2}))
+        local b=$((16#${hex_color:5:2}))
+        echo "\033[38;2;${r};${g};${b}m"
+    else
+        echo "$fallback"
+    fi
+}
+
 # Load pywal colors if available
 COLORS_FILE="$HOME/.cache/wal/colors.json"
-if [[ -f "$COLORS_FILE" ]]; then
+if [[ -f "$COLORS_FILE" ]] && command -v jq >/dev/null 2>&1; then
     COLOR1=$(jq -r '.colors.color1' "$COLORS_FILE" 2>/dev/null)
     COLOR2=$(jq -r '.colors.color2' "$COLORS_FILE" 2>/dev/null)
     COLOR3=$(jq -r '.colors.color3' "$COLORS_FILE" 2>/dev/null)
     COLOR4=$(jq -r '.colors.color4' "$COLORS_FILE" 2>/dev/null)
     COLOR7=$(jq -r '.colors.color7' "$COLORS_FILE" 2>/dev/null)
     COLOR13=$(jq -r '.colors.color13' "$COLORS_FILE" 2>/dev/null)
+    
+    # Validate colors (jq might return "null")
+    [[ "$COLOR1" == "null" || ! "$COLOR1" =~ ^#[0-9a-fA-F]{6}$ ]] && COLOR1="#f38ba8"
+    [[ "$COLOR2" == "null" || ! "$COLOR2" =~ ^#[0-9a-fA-F]{6}$ ]] && COLOR2="#a6e3a1"
+    [[ "$COLOR3" == "null" || ! "$COLOR3" =~ ^#[0-9a-fA-F]{6}$ ]] && COLOR3="#fab387"
+    [[ "$COLOR4" == "null" || ! "$COLOR4" =~ ^#[0-9a-fA-F]{6}$ ]] && COLOR4="#89b4fa"
+    [[ "$COLOR7" == "null" || ! "$COLOR7" =~ ^#[0-9a-fA-F]{6}$ ]] && COLOR7="#a6adc8"
+    [[ "$COLOR13" == "null" || ! "$COLOR13" =~ ^#[0-9a-fA-F]{6}$ ]] && COLOR13="#f5c2e7"
 else
     # Fallback colors
     COLOR1="#f38ba8"
@@ -90,18 +130,18 @@ else
     COLOR13="#f5c2e7"
 fi
 
-# ANSI color codes from hex
+# ANSI color codes
 reset="\033[0m"
 bold="\033[1m"
 dim="\033[2m"
 
-# Convert hex to ANSI (simplified approach)
-title_color="\033[38;2;$(printf '%d;%d;%d' 0x${COLOR4:1:2} 0x${COLOR4:3:2} 0x${COLOR4:5:2})m"
-accent_color="\033[38;2;$(printf '%d;%d;%d' 0x${COLOR13:1:2} 0x${COLOR13:3:2} 0x${COLOR13:5:2})m"
-success_color="\033[38;2;$(printf '%d;%d;%d' 0x${COLOR2:1:2} 0x${COLOR2:3:2} 0x${COLOR2:5:2})m"
-warning_color="\033[38;2;$(printf '%d;%d;%d' 0x${COLOR3:1:2} 0x${COLOR3:3:2} 0x${COLOR3:5:2})m"
-error_color="\033[38;2;$(printf '%d;%d;%d' 0x${COLOR1:1:2} 0x${COLOR1:3:2} 0x${COLOR1:5:2})m"
-info_color="\033[38;2;$(printf '%d;%d;%d' 0x${COLOR7:1:2} 0x${COLOR7:3:2} 0x${COLOR7:5:2})m"
+# Convert hex to ANSI with fallbacks
+title_color=$(hex_to_ansi "$COLOR4" "\033[94m")      # Blue
+accent_color=$(hex_to_ansi "$COLOR13" "\033[95m")    # Magenta
+success_color=$(hex_to_ansi "$COLOR2" "\033[92m")    # Green
+warning_color=$(hex_to_ansi "$COLOR3" "\033[93m")    # Yellow
+error_color=$(hex_to_ansi "$COLOR1" "\033[91m")      # Red
+info_color=$(hex_to_ansi "$COLOR7" "\033[97m")       # White
 
 echo -e "${title_color}${bold}📄 File Information${reset}\n"
 
@@ -118,6 +158,18 @@ if [[ -f "$file_path" ]]; then
     # File type detection
     file_type=$(file -b "$file_path" 2>/dev/null)
     echo -e "${accent_color}🏷️  Type:${reset} ${info_color}$file_type${reset}"
+    
+    # Show a preview of the file content
+    if [[ $line_count -gt 0 ]]; then
+        echo -e "\n${title_color}${bold}📝 Content Preview:${reset}"
+        echo -e "${dim}────────────────────────────────────${reset}"
+        head -n 10 "$file_path" 2>/dev/null | while IFS= read -r line; do
+            echo -e "${info_color}$line${reset}"
+        done
+        if [[ $line_count -gt 10 ]]; then
+            echo -e "${dim}... ($(($line_count - 10)) more lines)${reset}"
+        fi
+    fi
     
 else
     # File doesn't exist
@@ -170,7 +222,10 @@ configs=(
     $'📋 Rules\t'"$HOME/.config/hypr/configs/rules.conf"
     $'📦 Variables\t'"$HOME/.config/hypr/configs/variables.conf"
     $'🚀 Rofi Config\t'"$HOME/.config/rofi/config.rasi"
-    $'🔌 Power Menu Config\t'"$HOME/.config/rofi/powermenu.rasi"''
+    $'🔌 Power Menu Config\t'"$HOME/.config/rofi/powermenu.rasi"
+    $'📷 Screenshot Menu Config\t'"$HOME/.config/rofi/screenshot.rasi"
+    $'🌐 Qutebrowser config\t'"$HOME/.config/qutebrowser/config.py"
+
 )
 
 # Use fzf to select with preview pane

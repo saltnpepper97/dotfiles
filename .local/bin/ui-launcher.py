@@ -7,8 +7,9 @@ import sys
 import os
 import subprocess
 import time
-import json
 import threading
+import shlex
+import signal
 
 TIMEOUT = 45
 STATEFILE = "/tmp/ui-launcher-state"
@@ -23,77 +24,108 @@ UI_APPS = {
     "waypaper": "waypaper"
 }
 
-# Define which apps need Hyprland window management
 HYPRLAND_APPS = {
     "clipse": "clipse",
-    "floating-selector": "floating-selector", 
+    "floating-selector": "floating-selector",
     "waypaper": "waypaper"
 }
 
-def kill_process_tree(pid):
-    """Kill a process and all its children"""
+def is_running(pid: int) -> bool:
     try:
+        os.kill(pid, 0)
+        return True
+    except (OSError, ProcessLookupError):
+        return False
+
+def kill_process_tree(pid):
+    if not is_running(pid):
+        return
+    try:
+        # Get children with timeout
         result = subprocess.run(['pgrep', '-P', str(pid)],
-                                capture_output=True, text=True)
+                                capture_output=True, text=True, timeout=1.0)
         children = result.stdout.strip().split('\n') if result.stdout.strip() else []
         for child in children:
-            if child:
+            if child and child.isdigit():
                 kill_process_tree(int(child))
-        subprocess.run(['kill', str(pid)], stderr=subprocess.DEVNULL)
-    except:
-        pass
-
-def kill_by_name(name):
-    """Kill processes by name"""
-    try:
-        subprocess.run(['pkill', '-x', name], stderr=subprocess.DEVNULL)
-    except:
-        pass
+        
+        # Try SIGTERM first, then SIGKILL if needed
+        os.kill(pid, signal.SIGTERM)
+        time.sleep(0.02)  # Brief pause to allow graceful shutdown
+        if is_running(pid):
+            os.kill(pid, signal.SIGKILL)
+    except (subprocess.TimeoutExpired, Exception):
+        # If anything hangs or fails, force kill
+        try:
+            os.kill(pid, signal.SIGKILL)
+        except:
+            pass
 
 def kill_hyprland_window(class_name):
-    """Kill Hyprland window by class name"""
     try:
-        subprocess.run(['hyprctl', 'dispatch', 'signalwindow', f'class:{class_name},9'], 
-                      stderr=subprocess.DEVNULL)
-    except:
+        subprocess.run(['hyprctl', 'dispatch', 'signalwindow', f'class:{class_name},9'],
+                       stderr=subprocess.DEVNULL, timeout=1.0)
+    except (subprocess.TimeoutExpired, Exception):
         pass
 
-def kill_previous(app_name):
-    """Kill previous instance only of the same app"""
-    # Kill old PID from statefile
-    if os.path.exists(STATEFILE):
+def cleanup_stale_state():
+    """Remove state file if process is already dead"""
+    if not os.path.exists(STATEFILE):
+        return
+    try:
+        with open(STATEFILE, 'r') as f:
+            data = f.read().strip()
+        if not data:
+            os.unlink(STATEFILE)
+            return
+        if ',' in data:
+            prev_pid, prev_app = data.split(',', 1)
+            prev_pid = int(prev_pid)
+        else:
+            prev_pid = int(data)
+        
+        # If process is dead, clean up state
+        if not is_running(prev_pid):
+            os.unlink(STATEFILE)
+    except (ValueError, FileNotFoundError):
         try:
-            with open(STATEFILE, 'r') as f:
-                data = f.read().strip()
-                if ',' in data:
-                    prev_pid, prev_app = data.split(',', 1)
-                    prev_pid = int(prev_pid)
-                else:
-                    prev_pid = int(data)
-                    prev_app = None
-                
-                # Use appropriate kill method based on app type
-                if prev_app and prev_app in HYPRLAND_APPS:
-                    kill_hyprland_window(HYPRLAND_APPS[prev_app])
-                kill_process_tree(prev_pid)
             os.unlink(STATEFILE)
         except:
             pass
-    
-    # Kill named processes for apps that need it
-    if app_name == "rofi":
-        kill_by_name("rofi")
-    elif app_name == "waypaper":
-        kill_by_name("waypaper")
-        kill_hyprland_window("waypaper")
-    elif app_name in HYPRLAND_APPS:
-        kill_hyprland_window(HYPRLAND_APPS[app_name])
-    
-    # For clipse and floating-selector, we don't auto-kill — prevent immediate termination
-    time.sleep(0.2)
+
+def kill_previous(app_name):
+    cleanup_stale_state()
+    if not os.path.exists(STATEFILE):
+        return
+    try:
+        with open(STATEFILE, 'r') as f:
+            data = f.read().strip()
+            if ',' in data:
+                prev_pid, prev_app = data.split(',', 1)
+                prev_pid = int(prev_pid)
+            else:
+                prev_pid = int(data)
+                prev_app = None
+
+        if is_running(prev_pid):
+            if prev_app and prev_app in HYPRLAND_APPS:
+                kill_hyprland_window(HYPRLAND_APPS[prev_app])
+            kill_process_tree(prev_pid)
+
+        os.unlink(STATEFILE)
+        time.sleep(0.05)  # small buffer for Hyprland
+    except Exception:
+        try:
+            os.unlink(STATEFILE)
+        except:
+            pass
+
+def launch(command):
+    if isinstance(command, str):
+        return subprocess.Popen(shlex.split(command))
+    return subprocess.Popen(command)
 
 def auto_kill_timer(pid, app_name):
-    """Auto-kill the process after timeout"""
     time.sleep(TIMEOUT)
     try:
         if os.path.exists(STATEFILE):
@@ -105,14 +137,16 @@ def auto_kill_timer(pid, app_name):
                 else:
                     current_pid = int(data)
                     current_app = None
-                
+
             if current_pid == pid:
-                # Use appropriate kill method based on app type
                 if app_name in HYPRLAND_APPS:
                     kill_hyprland_window(HYPRLAND_APPS[app_name])
                 kill_process_tree(pid)
-                os.unlink(STATEFILE)
-    except:
+                try:
+                    os.unlink(STATEFILE)
+                except:
+                    pass
+    except Exception:
         pass
 
 def main():
@@ -120,39 +154,55 @@ def main():
         print(f"Usage: {sys.argv[0]} <app-name>")
         print(f"Available: {', '.join(UI_APPS.keys())}")
         sys.exit(1)
-    
+
     app = sys.argv[1]
     command = UI_APPS[app]
-    
-    # Kill previous app if needed
-    kill_previous(app)
-    
-    # Launch the app
-    if isinstance(command, str):
-        process = subprocess.Popen(command, shell=True)
-    else:
-        process = subprocess.Popen(command)
-    
+
+    # Toggle behavior: kill if same app running
+    if os.path.exists(STATEFILE):
+        try:
+            with open(STATEFILE, 'r') as f:
+                data = f.read().strip()
+                if ',' in data:
+                    prev_pid, prev_app = data.split(',', 1)
+                    prev_pid = int(prev_pid)
+                    if prev_app == app and is_running(prev_pid):
+                        kill_previous(app)
+                        return
+        except Exception:
+            pass
+
+    kill_previous(app)  # kill other apps if needed
+    process = launch(command)
     pid = process.pid
-    
-    # Save the PID and app name
-    with open(STATEFILE, 'w') as f:
-        f.write(f"{pid},{app}")
-    
-    # Start auto-kill timer (non-daemon so script stays alive)
-    timer_thread = threading.Thread(target=auto_kill_timer, args=(pid, app))
-    timer_thread.start()
-    
-    # Keep the script alive until the timer finishes or process ends
+
+    # Atomic write to state file
+    temp_statefile = f"{STATEFILE}.tmp"
     try:
-        timer_thread.join()
+        with open(temp_statefile, 'w') as f:
+            f.write(f"{pid},{app}")
+        os.rename(temp_statefile, STATEFILE)
+    except Exception:
+        # Fallback to direct write
+        with open(STATEFILE, 'w') as f:
+            f.write(f"{pid},{app}")
+
+    timer_thread = threading.Thread(target=auto_kill_timer, args=(pid, app))
+    timer_thread.daemon = True  # Don't block exit
+    timer_thread.start()
+
+    try:
+        # Wait for process to finish or be killed
+        process.wait()
     except KeyboardInterrupt:
-        # Clean up on Ctrl+C
         if app in HYPRLAND_APPS:
             kill_hyprland_window(HYPRLAND_APPS[app])
         kill_process_tree(pid)
         if os.path.exists(STATEFILE):
-            os.unlink(STATEFILE)
+            try:
+                os.unlink(STATEFILE)
+            except:
+                pass
 
 if __name__ == "__main__":
     main()

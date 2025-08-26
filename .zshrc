@@ -123,7 +123,9 @@ alias mkdir="mkdir -pv"          # create parent dirs verbosely
 
 # File managers
 alias y="yazi"
+alias Y="sudo yazi"
 alias bin="cd ~/.local/bin; clear; eza --icons -l"
+alias homepage="cd ~/.config/qutebrowser/homepage && ll"
 
 # Safe deletion with trash
 alias rm="echo 'Use trash-put instead of rm, or use /bin/rm for real deletion'"
@@ -229,4 +231,7 @@ alias barstyle="$EDITOR ~/.config/waybar/style.css"
 alias rconf="$EDITOR ~/.config/rofi/config.rasi"
 alias kittyconf="$EDITOR ~/.config/kitty/kitty.conf"
 
-
+# ------------------ PROGRAMMING PROJECTS ---------------------
+alias ce="cd ~/projects/apps/cadence-engine/ && ll"
+alias hf="cd ~/projects/apps/hueforge/ && ll"
+alias apm="cd ~/projects/apps/arch-package-manager/ && ll"

@@ -4,7 +4,7 @@ gtk_theme="adw-gtk3-dark"
 icon_theme="Papirus-Dark"
 cursor_theme="Bibata-Modern-Ice"
 cursor_size="24"
-font_name="Cantarell 11"
+font_name="Inter 11"
 gnome_schema="org.gnome.desktop.interface"
 
 safe_gsettings() {
