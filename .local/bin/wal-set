@@ -16,6 +16,7 @@ readonly YAZI_CONFIG_DIR="${HOME}/.config/yazi/flavors/pywal.yazi"
 readonly MAKO_CONFIG_DIR="${HOME}/.config/mako"
 readonly ZATHURA_CONFIG_DIR="${HOME}/.config/zathura"
 readonly SPICETIFY_THEME_DIR="${HOME}/.config/spicetify/Themes/text/"
+readonly HYPRLOCK_CONFIG="${HOME}/.config/hypr/hyprlock.conf"
 
 # Functions
 log_error() {
@@ -55,6 +56,35 @@ setup_pywal_theme() {
         log_error "Failed to set pywal theme"
         exit 1
     }
+}
+
+update_hyprlock_wallpaper() {
+    local wallpaper="$1"
+    
+    if [[ -f "$HYPRLOCK_CONFIG" ]]; then
+        echo "Updating hyprlock wallpaper to: $wallpaper"
+        
+        # Create a backup
+        cp "$HYPRLOCK_CONFIG" "${HYPRLOCK_CONFIG}.bak" || {
+            log_error "Failed to create backup of hyprlock config"
+            return 1
+        }
+        
+        # Update the wallpaper variable in the config
+        sed -i "s|^\$wallpaper = .*|\$wallpaper = $wallpaper|" "$HYPRLOCK_CONFIG" || {
+            log_error "Failed to update hyprlock wallpaper"
+            # Restore backup on failure
+            mv "${HYPRLOCK_CONFIG}.bak" "$HYPRLOCK_CONFIG"
+            return 1
+        }
+        
+        echo "Hyprlock wallpaper updated successfully"
+        
+        # Remove backup on success
+        rm -f "${HYPRLOCK_CONFIG}.bak"
+    else
+        log_error "Hyprlock config file not found: $HYPRLOCK_CONFIG"
+    fi
 }
 
 setup_gtk_theme() {
@@ -229,6 +259,7 @@ main() {
     
     # Set up themes
     setup_pywal_theme "$wallpaper"
+    update_hyprlock_wallpaper "$wallpaper"  # Add this line
     setup_gtk_theme
     setup_kvantum_theme
     setup_yazi_flavor

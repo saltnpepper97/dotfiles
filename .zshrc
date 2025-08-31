@@ -234,4 +234,4 @@ alias kittyconf="$EDITOR ~/.config/kitty/kitty.conf"
 # ------------------ PROGRAMMING PROJECTS ---------------------
 alias ce="cd ~/projects/apps/cadence-engine/ && ll"
 alias hf="cd ~/projects/apps/hueforge/ && ll"
-alias apm="cd ~/projects/apps/arch-package-manager/ && ll"
+

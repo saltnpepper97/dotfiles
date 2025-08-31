@@ -123,18 +123,29 @@ vim.keymap.set("n", "<leader>vv", "ggVG\"+p", { desc = "Paste clipboard over ent
 vim.keymap.set({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 vim.keymap.set({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 
--- Move to window using the <ctrl> hjkl keys
-vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Go to left window", remap = true })
-vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Go to lower window", remap = true })
-vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Go to upper window", remap = true })
-vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Go to right window", remap = true })
+-- Normal mode window navigation using neio
+vim.keymap.set("n", "<C-n>", "<C-w>h", { desc = "Move to window left" })
+vim.keymap.set("n", "<C-e>", "<C-w>j", { desc = "Move to window below" })
+vim.keymap.set("n", "<C-i>", "<C-w>k", { desc = "Move to window above" })
+vim.keymap.set("n", "<C-o>", "<C-w>l", { desc = "Move to window right" })
 
--- Resize window using <ctrl> arrow keys
+-- Terminal mode window navigation using neio
+vim.keymap.set("t", "<C-n>", "<C-\\><C-N><C-w>h", { desc = "Move to window left" })
+vim.keymap.set("t", "<C-e>", "<C-\\><C-N><C-w>j", { desc = "Move to window below" })
+vim.keymap.set("t", "<C-i>", "<C-\\><C-N><C-w>k", { desc = "Move to window above" })
+vim.keymap.set("t", "<C-o>", "<C-\\><C-N><C-w>l", { desc = "Move to window right" })
+
 vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
 vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
 vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
 vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
 
+-- Move between tabs (bufferline)
+vim.keymap.set("n", "<leader>bn", "<cmd>BufferLineCycleNext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<leader>bl", "<cmd>BufferLineCyclePrev<CR>", { desc = "Previous buffer" })
+
+-- Toggle terminal
+vim.keymap.set("n", "<leader>tt", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
 
 -- ------------------------------
 -- Autocommands
@@ -162,7 +173,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "vue", "svelte",
     "vim", "lua",
     "sh", "bash", "zsh",
-    "markdown", "text"
+    "markdown", "text", "qml",
   },
   callback = function()
     vim.opt_local.shiftwidth = 2

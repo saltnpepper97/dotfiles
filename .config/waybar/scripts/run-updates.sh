@@ -1,28 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
+
 LOCKFILE="/tmp/run-updates.lock"
 
-# -----------------------------
-# Check if another instance is running BEFORE launching Kitty
-# -----------------------------
+# Check for lockfile *before* launching Kitty
 if [ -e "$LOCKFILE" ]; then
     notify-send "Update already running" "Please wait for the current update to finish."
-    exit 0
+    exit 1
 fi
 
-# -----------------------------
-# Only launch GUI terminal if not inside Kitty
-# -----------------------------
+# Only launch GUI terminal if not already inside Kitty
 if [ -z "${INSIDE_KITTY:-}" ]; then
     export INSIDE_KITTY=1
     kitty --class updates --title "Arch Updates" bash "$0"
     exit 0
 fi
 
-# -----------------------------
-# Write own PID to lockfile
-# -----------------------------
-echo $$ > "$LOCKFILE"
+# Create lockfile atomically
+echo $$ > "$LOCKFILE" || {
+    notify-send "Failed to create lockfile" "Could not start update process."
+    exit 1
+}
 
 # -----------------------------
 # Colors for fancy output
@@ -40,161 +38,133 @@ RESET="\033[0m"
 progress_bar() {
     local pid=$1
     local message=$2
-    local width=40
+    local delay=0.2
+    local width=20
     local progress=0
     
-    echo -e "${CYAN}${message}${RESET}"
-    
     while kill -0 "$pid" 2>/dev/null; do
-        # Calculate progress (cycles through 0-100%)
-        progress=$(( (progress + 2) % 101 ))
-        local filled=$(( progress * width / 100 ))
-        local empty=$(( width - filled ))
+        local filled=$((progress % (width + 1)))
+        local empty=$((width - filled))
         
         printf "\r${CYAN}["
         printf "%*s" $filled | tr ' ' '|'
         printf "%*s" $empty | tr ' ' ' '
-        printf "] %3d%%${RESET}" $progress
+        printf "]${RESET} %s" "$message"
         
-        sleep 0.1
+        progress=$((progress + 1))
+        sleep $delay
     done
     
-    # Show completed bar
-    printf "\r${GREEN}["
+    # Show completed progress bar
+    printf "\r${CYAN}["
     printf "%*s" $width | tr ' ' '|'
-    printf "] 100%%${RESET}\n"
-    echo -e "${GREEN}✔ ${message} completed${RESET}\n"
-}
-
-# -----------------------------
-# Function to show package changes
-# -----------------------------
-show_package_changes() {
-    echo -e "${BOLD}${YELLOW}Checking for package updates...${RESET}"
-    
-    # Get list of packages to be updated
-    local updates
-    updates=$(paru -Qu 2>/dev/null || true)
-    
-    if [ -z "$updates" ]; then
-        echo -e "${GREEN}✔ System is up to date!${RESET}\n"
-        return 1
-    fi
-    
-    echo -e "${BOLD}${CYAN}Package version changes:${RESET}"
-    echo -e "${CYAN}────────────────────────────────${RESET}"
-    
-    while IFS= read -r line; do
-        if [[ -n "$line" ]]; then
-            package=$(echo "$line" | awk '{print $1}')
-            old_version=$(echo "$line" | awk '{print $2}')
-            new_version=$(echo "$line" | awk '{print $4}')
-            echo -e "${YELLOW}${package}${RESET}: ${RED}${old_version}${RESET} → ${GREEN}${new_version}${RESET}"
-        fi
-    done <<< "$updates"
-    
-    echo -e "${CYAN}────────────────────────────────${RESET}"
-    echo
-    
-    return 0
-}
-
-# -----------------------------
-# Function to run paru with progress bar
-# -----------------------------
-run_paru_update() {
-    local temp_log="/tmp/paru_output.log"
-    
-    # Run paru in background, redirect output to log file
-    paru -Syu --noconfirm > "$temp_log" 2>&1 &
-    local paru_pid=$!
-    
-    # Show progress bar while paru runs
-    progress_bar $paru_pid "Installing updates"
-    
-    # Wait for paru to complete and get exit status
-    wait $paru_pid
-    local exit_status=$?
-    
-    # Clean up log file
-    rm -f "$temp_log"
-    
-    if [ $exit_status -eq 0 ]; then
-        echo -e "${GREEN}✔ All packages updated successfully!${RESET}"
-    else
-        echo -e "${RED}✗ Update process encountered errors${RESET}"
-    fi
-    
-    return $exit_status
+    printf "]${RESET} %s\n" "$message"
 }
 
 # -----------------------------
 # Fancy title
 # -----------------------------
 clear
-echo -e "${BOLD}${CYAN}╔══════════════════════════════════╗${RESET}"
-echo -e "${BOLD}${CYAN}║        Arch Linux Updates        ║${RESET}"
-echo -e "${BOLD}${CYAN}╚══════════════════════════════════╝${RESET}"
+echo -e "${BOLD}${CYAN}---------------- Arch Update Manager ----------------${RESET}"
 echo
 echo -e "${YELLOW}Host: ${RESET}$(cat /etc/hostname)"
 echo -e "${YELLOW}User: ${RESET}$USER"
 echo -e "${YELLOW}Date: ${RESET}$(date '+%Y-%m-%d %H:%M:%S')"
 echo
-sleep 1
 
 # -----------------------------
-# Show package changes and run update
+# Fetching update information
 # -----------------------------
-if show_package_changes; then
-    echo
-    echo -e "${YELLOW}Do you want to proceed with the updates? (y/N): ${RESET}"
-    read -rp "" confirm
-    
-    if [[ ! "$confirm" =~ ^[Yy]([Ee][Ss])?$ ]]; then
-        echo -e "${CYAN}Update cancelled by user.${RESET}"
-        echo
-        # Flush any stray keypresses
-        read -t 0.1 -n 10000 discard 2>/dev/null || true
-        echo -e "${YELLOW}Press Enter to close...${RESET}"
-        read -rp ""
-        # Refresh Waybar updates (silent)
-        ~/.config/waybar/scripts/check-updates.sh force
-        # Remove lockfile when user hits enter
-        rm -f "$LOCKFILE"
-        exit 0
-    fi
-    
-    echo -e "${YELLOW}Starting system update...${RESET}"
-    echo
-    
-    if run_paru_update; then
-        echo
-        echo -e "${GREEN}${BOLD}Update completed successfully!${RESET}"
-    else
-        echo
-        echo -e "${RED}${BOLD}Update completed with errors. Check the system logs for details.${RESET}"
-    fi
-else
-    echo -e "${GREEN}${BOLD}No updates available.${RESET}"
+echo -e "${BOLD}Fetching update information...${RESET}"
+if ! paru -Sy &>/dev/null; then
+    echo -e "${RED}Failed to sync package databases${RESET}"
+    rm -f "$LOCKFILE"
+    exit 1
+fi
+updates=$(paru -Qu 2>/dev/null || true)
+
+if [ -z "$updates" ]; then
+    echo -e "${GREEN}No updates available${RESET}"
+    echo -e "${YELLOW}Press Enter to close...${RESET}"
+    stty sane  # Reset terminal settings
+    read -r
+    ~/.config/waybar/scripts/check-updates.sh force
+    rm -f "$LOCKFILE"
+    exit 0
 fi
 
+# -----------------------------
+# Show packages that need updating
+# -----------------------------
+echo -e "${YELLOW}Packages that need updating:${RESET}"
+echo "$updates"
+echo
+total_packages=$(echo "$updates" | wc -l)
+echo -e "${YELLOW}Total packages to update: $total_packages${RESET}"
 echo
 
 # -----------------------------
-# Flush any stray keypresses
+# Ask for confirmation
 # -----------------------------
-read -t 0.1 -n 10000 discard 2>/dev/null || true
+echo -e "${BOLD}Do you want to proceed with the update? (y/n):${RESET}"
+stty sane  # Reset terminal settings before reading input
+read -rp "" response
+
+case "$response" in
+    [yY]|[yY][eE][sS])
+        echo -e "${GREEN}Proceeding with update...${RESET}"
+        ;;
+    *)
+        echo -e "${RED}Update cancelled${RESET}"
+        ~/.config/waybar/scripts/check-updates.sh force
+        rm -f "$LOCKFILE"
+        exit 0
+        ;;
+esac
 
 # -----------------------------
-# Wait for fresh Enter
+# Create cache directory if it doesn't exist
 # -----------------------------
-echo -e "${YELLOW}Press Enter to close...${RESET}"
-read -rp ""
+mkdir -p ~/.cache/updates
 
 # -----------------------------
-# Refresh Waybar updates (silent)
+# Ensure lockfile is always removed
+# -----------------------------
+cleanup() {
+    rm -f "$LOCKFILE"
+}
+trap cleanup EXIT
+
+# -----------------------------
+# Run system update and save output
+# -----------------------------
+# Run system update and save output
+echo -e "${BOLD}Updating packages...${RESET}"
+paru -Syu --noconfirm > ~/.cache/updates/last-update.txt 2>&1 &
+update_pid=$!
+
+# Show progress bar while update runs
+progress_bar $update_pid "Updating packages"
+
+# Wait for update to complete and check exit status
+if wait $update_pid; then
+    echo -e "${GREEN}[✔] Update complete${RESET}"
+else
+    echo -e "${RED}[✘] Update failed. Check ~/.cache/updates/last-update.txt for details${RESET}"
+    ~/.config/waybar/scripts/check-updates.sh force
+    rm -f "$LOCKFILE"
+    exit 1
+fi
+
+
+# -----------------------------
+# Run waybar script
 # -----------------------------
 ~/.config/waybar/scripts/check-updates.sh force
 
-# Remove lockfile when user hits enter
-rm -f "$LOCKFILE"
+# -----------------------------
+# Wait for user to exit
+# -----------------------------
+echo -e "${YELLOW}Press Enter to close...${RESET}"
+stty sane  # Reset terminal settings
+read -r

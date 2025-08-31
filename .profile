@@ -13,3 +13,6 @@ export SDL_VIDEO_FULLSCREEN_DISPLAY=0  # force monitor 0
 
 # Use high precision for OpenGL/Vulkan
 export MESA_GLSL_CACHE_DISABLE=0
+
+
+export MESA_VK_WSI_PLATFORM=wayland

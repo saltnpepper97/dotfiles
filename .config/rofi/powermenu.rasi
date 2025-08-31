@@ -12,7 +12,7 @@
 /*****----- Configuration -----*****/
 configuration {
     show-icons:                 false;
-    font:                       "Departure Mono 14";
+    font:                       "Maple Mono NF 14";
 }
 
 /*****----- Global Properties -----*****/

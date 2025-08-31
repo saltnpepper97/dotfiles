@@ -21,7 +21,7 @@ config.load_autoconfig()
 # Session management
 c.auto_save.session = False
 c.auto_save.interval = 0
-c.session.lazy_restore = True  # Load tabs only when accessed
+c.session.lazy_restore = False  # Load tabs only when accessed
 
 # Disable resource-heavy features
 c.spellcheck.languages = []  # Disable spellchecking for faster startup
