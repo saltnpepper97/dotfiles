@@ -8,12 +8,12 @@ BACKGROUND_CHECK_FLAG="/tmp/waybar-updates-bg.flag"
 
 # Default output
 default_output() {
-    echo '{"text":"?","class":"checking","tooltip":"Checking for updates..."}'
+    echo '{"text":"0","class":"checking","tooltip":"Checking for updates..."}'
 }
 
 # Loading output
 loading_output() {
-    echo '{"text":"...","class":"checking","tooltip":"Checking for updates..."}'
+    echo '{"text":"0","class":"checking","tooltip":"Checking for updates..."}'
 }
 
 # Check if package managers are busy

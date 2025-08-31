@@ -215,7 +215,7 @@ configs=(
     $'😴 Hypridle Config\t'"$HOME/.config/hypr/hypridle.conf"
     $'🔒 Hyprlock Config\t'"$HOME/.config/hypr/hyprlock.conf"
     $'🚀 Autostart\t'"$HOME/.config/hypr/configs/autostart.conf"
-    $'⌨️ Keybinds\t'"$HOME/.config/hypr/configs/bindings.conf"
+    $'⌨️ Keybinds\t'"$HOME/.config/hypr/configs/keybinds.conf"
     $'🌍 Environment\t'"$HOME/.config/hypr/configs/env.conf"
     $'⚙️ General\t'"$HOME/.config/hypr/configs/general.conf"
     $'✨ Look & Feel\t'"$HOME/.config/hypr/configs/look-and-feel.conf"
@@ -225,6 +225,7 @@ configs=(
     $'🔌 Power Menu Config\t'"$HOME/.config/rofi/powermenu.rasi"
     $'📷 Screenshot Menu Config\t'"$HOME/.config/rofi/screenshot.rasi"
     $'🌐 Qutebrowser config\t'"$HOME/.config/qutebrowser/config.py"
+    $'💬 Mako config\t'"$HOME/.config/wal/templates/mako"
 
 )
 

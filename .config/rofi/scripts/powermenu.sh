@@ -84,7 +84,7 @@ case ${chosen} in
 		run_cmd --reboot
         ;;
     $lock)
-      sleep 0.5 && loginctl lock-session
+      sleep 0.5 && playerctl pause; loginctl lock-session
         ;;
     $suspend)
 		run_cmd --suspend

@@ -205,7 +205,7 @@ alias jctlf="journalctl -f"
 
 # System info
 alias uptime="uptime -p"
-alias ff="fastfetch"
+alias ff="kitty --class=fastfetch --detach --hold -e fastfetch"
 
 # GRUB
 alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
