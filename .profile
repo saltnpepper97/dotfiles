@@ -1,18 +1,4 @@
-# Use AMD ACO shader compiler for RADV
-export RADV_PERFTEST=aco
+# Adaptive Sync and Shader Caching
+export DXVK_ASYNC=1
+export DXVK_SHADER_CACHE=1
 
-# Enable async shader compilation for smoother frame times
-export RADV_DEBUG=lazy_alloc
-
-# Let gamemode and the scheduler optimize threads
-export GAMEMODERUN=1
-
-# Prevent unnecessary CPU frequency scaling delays (optional)
-export SDL_VIDEO_GL_DRIVER=mesa
-export SDL_VIDEO_FULLSCREEN_DISPLAY=0  # force monitor 0
-
-# Use high precision for OpenGL/Vulkan
-export MESA_GLSL_CACHE_DISABLE=0
-
-
-export MESA_VK_WSI_PLATFORM=wayland

@@ -1,0 +1,19 @@
+@author "Dustin Pilgrim"
+@description "Feature packed clipboard manager for X11/Wayland"
+
+gather "~/.cache/wal/claw-pywal.rune"
+
+clipboard:
+    history-max-length = 100
+    enable_titlebar = false
+    force-dark-mode = false
+    theme "default"
+
+    keybinds:
+      up "up"
+      down "down"
+      delete "x"
+      delete-all "Shift+x"
+      select "Return"
+    end
+end

@@ -15,19 +15,20 @@
     "position": "top",
     "spacing": 0,
     "mode": "dock",
-    "margin": 8,
+    //"margin": 10,
     "start_hidden": false,
     "fixed-center": true,
     "name": "main",
     "reload_style_on_change": true,
-
 
     // Layout
 
     "modules-left": [
       "hyprland/workspaces"
     ],
-    "modules-center": [],
+    "modules-center": [
+      "clock"
+    ],
     "modules-right": [
       "group/systray",
       "custom/updates-icon",
@@ -41,10 +42,11 @@
       "group/internet",
       "custom/separator",
       "group/audio",
-      "clock" 
+      "custom/power-icon"
     ],
 
     // Groups
+
     "group/audio": {
       "orientation": "horizontal",
       "modules": [
@@ -97,7 +99,7 @@
     },
 
     "tray": {
-      "icon-size": 18,
+      "icon-size": 16,
       "show-passive-items": false,
       "reverse-direction": false,
       "spacing": 8
@@ -162,7 +164,8 @@
     "clock": {
         //"timezone": "America/Halifax",
         "format": "{:%a %d %B, %I:%M %p}",
-        "tooltip": false
+        "tooltip": false,
+        "on-click": "~/.config/waybar/scripts/calendar.sh"
     },
 
     // Custom
@@ -194,9 +197,16 @@
         "tooltip": false
     },
 
+    "custom/power-icon": {
+        "format": "",
+        "on-click": "~/.config/rofi/scripts/powermenu.sh",
+        "tooltip": false
+    },
+
     "custom/separator": {
       "format": "|",
-      "interval": "once"
+      "interval": "once",
+      "tooltip": false
     }
   },
 
@@ -206,7 +216,8 @@
     "output": "DP-2",
     "position": "top",
     "spacing": 0,
-    "margin": 8,
+    "height": 38,
+    //"margin": 10,
     "mode": "dock",
     "start_hidden": false,
     "fixed-center": true,
@@ -219,9 +230,10 @@
     "modules-left": [
       "hyprland/workspaces"
     ],
-    "modules-center": [],
+    "modules-center": ["clock"],
     "modules-right": [
-      "clock"
+      "gamemode",
+      "custom/power-icon"
     ],
 
     // Left Modules
@@ -242,14 +254,34 @@
     "clock": {
         // "timezone": "America/Halifax",
         "format": "{:%a %d %B, %I:%M %p}",
-        "tooltip": false
+        "tooltip": false,
+        "on-click": "~/.config/waybar/scripts/calendar.sh"
     },
 
     // Custom
 
+    "custom/power-icon": {
+        "format": "",
+        "on-click": "~/.config/rofi/scripts/powermenu.sh",
+        "tooltip": false
+    },
+
+    "gamemode": {
+        "format": "{glyph}",
+        "format-alt": "{glyph}",
+        "glyph": "",
+        "hide-not-running": true,
+        "use-icon": true,
+        "icon-name": "joystick",
+        "icon-spacing": 4,
+        "icon-size": 20,
+        "tooltip": false
+    },
+
     "custom/separator": {
       "format": "|",
-      "interval": "once"
+      "interval": "once",
+      "tooltip": false
     }
   }
 ]

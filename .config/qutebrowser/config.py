@@ -46,7 +46,7 @@ c.url.start_pages = ['file:///home/dustin/.config/qutebrowser/homepage/index.htm
 c.downloads.location.directory = '~/downloads'
 
 # === APPEARANCE ===
-c.fonts.default_family = 'Departure Mono'
+c.fonts.default_family = 'AtkynsonMono Nerd Font'
 c.fonts.default_size = '12pt'
 c.zoom.default = '100%'
 
@@ -100,3 +100,5 @@ config.bind('b', 'bookmark-list')
 config.bind('+', 'zoom-in')
 config.bind('-', 'zoom-out')
 config.bind('=', 'zoom')          # reset zoom
+
+

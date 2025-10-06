@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cd ~
+
+sleep 0.5
+
+niri-session

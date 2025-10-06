@@ -10,31 +10,30 @@
 @import '/home/dustin/.cache/wal/colors-waybar.css';
 
 * {
-    font-family: Symbols Nerd Font, Inter, sans-serif;
+    font-family: "Symbols Nerd Font", "AtkynsonMono Nerd Font", sans-serif;
     font-size: 14px;
 }
 
 window#waybar {
-    background-color: alpha(@background, 0.85);
+    background-color: @background;
     color: @foreground;
     transition-property: background-color;
     transition-duration: .5s;
-    border-radius: 8px;
+}
+
+window#waybar > box {
+  padding: 4px 6px;
 }
 
 window#waybar.hidden {
     opacity: 0.2;
 }
 
-window#waybar > box {
-    padding: 6px 10px;
-}
-
-#workspaces button {
+workspaces button {
     background-color: transparent;
     color: alpha(@color7, 0.4);
     margin: 0 3px;
-    padding: 5px 10px;
+    padding: 0px 10px;
 }
 
 #workspaces button.active {
@@ -53,6 +52,12 @@ window#waybar > box {
     background-color: alpha(@color4, 0.4);
 }
 
+/* Occupied */
+#workspaces button:not(.active):not(.empty) {
+    color: alpha(@color7, 0.7);   /* example */
+    background-color: transparent;
+    border-radius: 4px;
+}
 
 button {
     border: none;
@@ -67,15 +72,13 @@ button:hover {
 #cpu,
 #memory,
 #network,
-#clock {
-    padding: 6px 12px;
+#custom-power-icon {
+    padding: 0px 12px;
     margin: 0 2px;
     border-radius: 6px;
     transition: all 0.2s ease;
 }
 
-#tray {
-}
 
 #tray > .passive {
     -gtk-icon-effect: dim;
@@ -131,10 +134,8 @@ button:hover {
     padding-left: 10px;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     font-family: Symbols Nerd Font;
-    font-size: 18px;
+    font-size: 14px;
 }
-
-
 
 #pulseaudio.muted {
     color: alpha(@color8, 0.8);
@@ -150,7 +151,7 @@ button:hover {
 }
 
 #pulseaudio-slider trough {
-    min-height: 12px;
+    min-height: 8px;
     min-width: 100px;
     border-radius: 6px;
     border: 0;
@@ -170,13 +171,32 @@ button:hover {
     color: @foreground;
     background-color: alpha(@color4, 0.8);
     border-radius: 6px;
-    font-weight: bold;
+    font-weight: 600;
+    padding: 0 12px;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     box-shadow: 0 2px 4px alpha(@color4, 0.3);
 }
 
 #clock:hover {
-    background-color: alpha(@color4, 0.9);
+    background-color: alpha(@color3, 0.9);
 }
 
+
+#custom-power-icon {
+    color: @foreground;
+    background-color: alpha(@color4, 0.8);
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 15px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px alpha(@color4, 0.3);
+}
+
+#custom-power-icon:hover {
+    background-color: alpha(@color3, 0.9);
+}
+
+#gamemode {
+  margin-right: 5px;
+}
 

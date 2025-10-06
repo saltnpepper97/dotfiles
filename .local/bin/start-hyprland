@@ -2,4 +2,7 @@
 
 cd ~
 
-exec dbus-run-session -- Hyprland > ~/.cache/hyprland.log 2>&1
+# Source your shell profile manually
+[ -f ~/.profile ] && . ~/.profile
+
+exec dbus-run-session -- env Hyprland > ~/.cache/hyprland.log 2>&1

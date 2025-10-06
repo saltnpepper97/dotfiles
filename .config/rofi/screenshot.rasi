@@ -14,7 +14,7 @@ configuration {
 }
 
 /*****----- Global Properties -----*****/
-@import "~/.cache/wal/colors-rofi-dark.rasi"
+@import "~/.cache/wal/rofi-colors.rasi"
 
 /*****----- Main Window -----*****/
 window {
@@ -63,7 +63,7 @@ prompt {
     border-radius:               5px;
     background-color:            @active-background;
     text-color:                  @active-foreground;
-    font:                        "Maple Mono NF 14";
+    font:                        "AtkynsonMono Nerd Font 14";
 }
 
 /*****----- Listview -----*****/
@@ -106,45 +106,3 @@ element-text {
     horizontal-align:            0.5;
 }
 
-/* Normal state */
-element normal.normal,
-element alternate.normal {
-    background-color:            @normal-background;
-    text-color:                  @normal-foreground;
-    border-color:                transparent;
-}
-
-/* Urgent state */
-element normal.urgent,
-element alternate.urgent {
-    background-color:            @urgent-background;
-    text-color:                  @urgent-foreground;
-    border-color:                @urgent-background;
-}
-
-/* Active state */
-element normal.active,
-element alternate.active {
-    background-color:            @active-background;
-    text-color:                  @active-foreground;
-    border-color:                @active-background;
-}
-
-/* Selected states using your new selected-* colors */
-element selected.normal {
-    background-color:            @selected-normal-background;
-    text-color:                  @selected-normal-foreground;
-    border-color:                @selected-normal-background;
-}
-
-element selected.active {
-    background-color:            @selected-active-background;
-    text-color:                  @selected-active-foreground;
-    border-color:                @selected-active-background;
-}
-
-element selected.urgent {
-    background-color:            @selected-urgent-background;
-    text-color:                  @selected-urgent-foreground;
-    border-color:                @selected-urgent-background;
-}

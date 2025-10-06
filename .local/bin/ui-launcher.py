@@ -11,7 +11,7 @@ import threading
 import shlex
 import signal
 
-TIMEOUT = 45
+TIMEOUT = 60
 STATEFILE = "/tmp/ui-launcher-state"
 
 # Define apps

@@ -6,6 +6,7 @@ import time
 import atexit
 import signal
 import fcntl
+import re
 from pathlib import Path
 
 LOCKFILE = Path("/tmp/run-updates.lock")
@@ -53,16 +54,10 @@ if not os.environ.get("INSIDE_KITTY"):
 
     os.environ["INSIDE_KITTY"] = "1"
 
-
+    # Simplified wrapper - just run the Python script
     wrapper_script = f'''#!/bin/bash
 cd "{os.getcwd()}"
 python3 "{__file__}"
-exit_code=$?
-if [ $exit_code -eq 2 ]; then
-    read -p "Press Enter to close..."
-    "{WAYBAR_SCRIPT}" force &
-fi
-exit $exit_code
 '''
     wrapper_path = Path("/tmp/update-wrapper.sh")
     wrapper_path.write_text(wrapper_script)
@@ -112,6 +107,22 @@ signal.signal(signal.SIGTERM, lambda s, f: sys.exit(0))
 signal.signal(signal.SIGINT, lambda s, f: sys.exit(0))
 
 # -----------------------------
+# Progress bar function
+# -----------------------------
+def update_progress_bar(current, total, bar_width=35):
+    """Display a progress bar with current/total packages."""
+    if total == 0:
+        filled = 0
+    else:
+        filled = int(bar_width * current / total)
+    
+    empty = bar_width - filled
+    bar = "|" * filled + " " * empty
+    percentage = int(100 * current / total) if total > 0 else 0
+    
+    print(f"\r{CYAN}[{bar}]{RESET} ({current}/{total}) {percentage}%", end="", flush=True)
+
+# -----------------------------
 # Fancy title
 # -----------------------------
 os.system("clear")
@@ -127,14 +138,16 @@ print(f"{BOLD}Fetching update information...{RESET}")
 sync = subprocess.run(["paru", "-Sy"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 if sync.returncode != 0:
     print(f"{RED}Failed to sync package databases{RESET}")
-    sys.exit(2)
+    input("Press Enter to close...")
+    sys.exit(1)
 
 updates = subprocess.run(["paru", "-Qu"], capture_output=True, text=True)
 updates_list = updates.stdout.strip().splitlines()
 
 if not updates_list:
     print(f"{GREEN}No updates available{RESET}")
-    sys.exit(2)
+    input("Press Enter to close...")
+    sys.exit(0)
 
 # -----------------------------
 # Show updates
@@ -149,7 +162,8 @@ print(f"\n{YELLOW}Total packages to update: {len(updates_list)}{RESET}\n")
 response = input(f"{BOLD}Do you want to proceed with the update? (y/n):{RESET} ").strip().lower()
 if response not in ("y", "yes"):
     print(f"{RED}Update cancelled{RESET}")
-    sys.exit(2)
+    input("Press Enter to close...")
+    sys.exit(0)
 
 print(f"{GREEN}Proceeding with update...{RESET}")
 
@@ -159,33 +173,100 @@ print(f"{GREEN}Proceeding with update...{RESET}")
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 # -----------------------------
-# Run update with progress bar
+# Run update with real progress tracking
 # -----------------------------
 print(f"{BOLD}Updating packages...{RESET}")
 
+total_packages = len(updates_list)
+completed_packages = 0
+
+# Pattern to match package installation/upgrade messages
+install_patterns = [
+    re.compile(r"installing (\S+)"),
+    re.compile(r"upgrading (\S+)"),
+    re.compile(r"reinstalling (\S+)"),
+    re.compile(r"\[(\d+)/(\d+)\]"),  # Sometimes paru shows [x/y] progress
+]
+
+update_progress_bar(completed_packages, total_packages)
+
+proc = subprocess.Popen(
+    ["paru", "-Syu", "--noconfirm"],
+    stdout=subprocess.PIPE,
+    stderr=subprocess.STDOUT,
+    universal_newlines=True,
+    bufsize=1
+)
+
+# Log file for debugging
 with UPDATE_LOG.open("w") as logfile:
-    proc = subprocess.Popen(["paru", "-Syu", "--noconfirm"], stdout=logfile, stderr=subprocess.STDOUT)
+    while True:
+        if proc.stdout is None:
+            break
+        output = proc.stdout.readline()
+        if output == '' and proc.poll() is not None:
+            break
+        
+        if output:
+            # Write to log
+            logfile.write(output)
+            logfile.flush()
+            
+            # Check for progress indicators
+            line = output.strip().lower()
+            
+            # Look for package installation/upgrade messages
+            for pattern in install_patterns:
+                if pattern.search(line):
+                    # Check if this is a [x/y] pattern which gives us exact progress
+                    match = re.search(r"\[(\d+)/(\d+)\]", line)
+                    if match:
+                        current = int(match.group(1))
+                        total = int(match.group(2))
+                        if total == total_packages:  # Make sure it matches our expected total
+                            completed_packages = current
+                        else:
+                            # Estimate based on the pattern
+                            completed_packages = min(completed_packages + 1, total_packages)
+                    else:
+                        # Increment for other installation messages
+                        completed_packages = min(completed_packages + 1, total_packages)
+                    
+                    update_progress_bar(completed_packages, total_packages)
+                    break
+            
+            # Also look for other progress indicators
+            if any(keyword in line for keyword in ['downloading', 'checking', 'resolving']):
+                # Small progress for preparatory steps
+                if completed_packages == 0:
+                    update_progress_bar(0, total_packages)
 
-    width = 20
-    progress = 0
-    while proc.poll() is None:
-        filled = progress % (width + 1)
-        empty = width - filled
-        bar = "|" * filled + " " * empty
-        print(f"\r{CYAN}[{bar}]{RESET} Updating packages", end="", flush=True)
-        progress += 1
-        time.sleep(0.2)
-
-    print(f"\r{CYAN}[{'|'*width}]{RESET} Updating packages")
+# Ensure we show 100% completion
+update_progress_bar(total_packages, total_packages)
+print()  # New line after progress bar
 
 # -----------------------------
-# After update is complete
+# Handle update completion
 # -----------------------------
+update_performed = False
+
 if proc.returncode == 0:
     print(f"{GREEN}[✔] Update complete{RESET}")
+    update_performed = True
 else:
     print(f"{RED}[✘] Update failed. Check {UPDATE_LOG} for details{RESET}")
 
+# Always ask user to press Enter before closing
+print(f"\n{BOLD}Press Enter to close...{RESET}")
+input()
+
+# If updates were performed successfully, run waybar script with force flag
+if update_performed:
+    print(f"{CYAN}Refreshing waybar...{RESET}")
+    try:
+        subprocess.run([str(WAYBAR_SCRIPT), "force"], check=False)
+    except Exception as e:
+        print(f"{YELLOW}Warning: Could not refresh waybar: {e}{RESET}")
 
 print(f"{GREEN}Exiting update script.{RESET}")
-sys.exit(2)
+sys.exit(0)

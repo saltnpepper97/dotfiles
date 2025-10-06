@@ -9,5 +9,7 @@ settings:
   content.javascript.clipboard:
     https://chatgpt.com: access-paste
     https://claude.ai: access-paste
+    https://crates.io: access-paste
+    https://github.com: access-paste
     https://patorjk.com: access-paste
     https://phosphoricons.com: access-paste

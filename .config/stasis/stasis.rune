@@ -1,0 +1,40 @@
+#
+#   ███████╗████████╗ █████╗ ███████╗██╗███████╗    
+#   ██╔════╝╚══██╔══╝██╔══██╗██╔════╝██║██╔════╝    
+#   ███████╗   ██║   ███████║███████╗██║███████╗    
+#   ╚════██║   ██║   ██╔══██║╚════██║██║╚════██║    
+#   ███████║   ██║   ██║  ██║███████║██║███████║    
+#   ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝╚══════╝    
+#
+
+@author "Dustin Pilgrim"
+@description "Stasis configuration file"
+
+idle:
+  resume-command "killall waybar && waybar"
+  monitor-media true
+  respect-idle-inhibitors true
+  pre-suspend-command "notify-send 'Suspending in 3 seconds...' && sleep 3"
+  
+  inhibit_apps [
+    "mpv",
+    r".*\.exe",
+    r"steam_app_.*",
+  ]
+
+  lock-screen:
+    timeout = 300
+    command "hyprlock && pkill waybar && waybar"
+  end
+
+  dpms:
+    timeout = 330 # 5 mins & 30s
+    command "niri msg action power-off-monitors"
+  end
+
+  suspend:
+    timeout 1800 # 30 minutes
+    command "systemctl suspend"
+  end
+end
+

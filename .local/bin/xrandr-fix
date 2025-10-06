@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Force correct layout for Xwayland after DPMS/sleep
+xrandr \
+  --output DP-1 --mode 2560x1440 --rate 75 --primary --pos 0x0 \
+  --output DP-2 --mode 1920x1200 --rate 75 --pos 2560x0

@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Configuration
 CACHE_FILE="/tmp/waybar-updates.json"
 LOCK_FILE="/tmp/waybar-updates.lock"
@@ -35,6 +34,35 @@ use_cache() {
     return 1
 }
 
+# Acquire lock with timeout
+acquire_lock() {
+    local timeout=${1:-300}  # 5 minutes default
+    local count=0
+    
+    while [[ -f "$LOCK_FILE" ]] && [[ $count -lt $timeout ]]; do
+        local lock_age=$(( $(date +%s) - $(stat -c %Y "$LOCK_FILE" 2>/dev/null || echo 0) ))
+        # If lock is too old, remove it
+        if [[ $lock_age -gt 300 ]]; then
+            rm -f "$LOCK_FILE"
+            break
+        fi
+        sleep 1
+        ((count++))
+    done
+    
+    # Try to create lock
+    if (set -C; echo $$ > "$LOCK_FILE") 2>/dev/null; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Release lock
+release_lock() {
+    rm -f "$LOCK_FILE"
+}
+
 # Background update check
 background_check() {
     # Mark that background check is running
@@ -50,11 +78,14 @@ background_check() {
         [[ $? -eq 0 && -n "$pacman_out" ]] && pacman=$(echo "$pacman_out" | wc -l)
     fi
     
-    # AUR updates (only if paru is available and system not busy)
-    if command -v paru >/dev/null 2>&1 && ! is_busy; then
-        local aur_out
-        aur_out=$(timeout 90 paru -Qua 2>/dev/null | grep -v "^::")
-        [[ $? -eq 0 && -n "$aur_out" ]] && aur=$(echo "$aur_out" | wc -l)
+    # AUR updates (only if paru is available and system not busy for non-force calls)
+    if command -v paru >/dev/null 2>&1; then
+        # For force calls, we always check AUR even if busy
+        if [[ "$1" == "force" ]] || ! is_busy; then
+            local aur_out
+            aur_out=$(timeout 90 paru -Qua 2>/dev/null | grep -v "^::")
+            [[ $? -eq 0 && -n "$aur_out" ]] && aur=$(echo "$aur_out" | wc -l)
+        fi
     fi
     
     # Generate output
@@ -94,21 +125,30 @@ main() {
     
     # If forced update, do full check synchronously
     if [[ "$FORCE_UPDATE" == "force" ]]; then
-        # Create lock
-        touch "$LOCK_FILE"
-        trap 'rm -f "$LOCK_FILE"' EXIT
-        background_check
-        cat "$CACHE_FILE"
+        # Try to acquire lock, but don't wait too long for force updates
+        if acquire_lock 10; then
+            trap 'release_lock' EXIT INT TERM
+            # Clear old cache to force fresh check
+            rm -f "$CACHE_FILE"
+            background_check "force"
+            cat "$CACHE_FILE"
+            release_lock
+            trap - EXIT INT TERM
+        else
+            # If we can't get lock quickly, just use cache or default
+            use_cache || default_output
+        fi
         exit 0
     fi
     
-    # If another instance is running, use cache or default
+    # Check if lock exists and is recent
     if [[ -f "$LOCK_FILE" ]]; then
         local lock_age=$(( $(date +%s) - $(stat -c %Y "$LOCK_FILE" 2>/dev/null || echo 0) ))
         if [[ $lock_age -lt 300 ]]; then
             use_cache || loading_output
             exit 0
         else
+            # Remove stale lock
             rm -f "$LOCK_FILE"
         fi
     fi
@@ -126,17 +166,18 @@ main() {
     
     # If no valid cache and no background check is running, start one
     if [[ ! -f "$BACKGROUND_CHECK_FLAG" ]]; then
-        # Create lock
-        touch "$LOCK_FILE"
-        
-        # Start background check
-        (
-            trap 'rm -f "$LOCK_FILE"' EXIT
-            background_check
-        ) &
-        
-        # Detach from parent
-        disown
+        # Try to acquire lock for background check
+        if acquire_lock 5; then
+            # Start background check
+            (
+                trap 'release_lock' EXIT INT TERM
+                background_check
+                release_lock
+            ) &
+            
+            # Detach from parent
+            disown
+        fi
     fi
     
     # Return loading indicator immediately

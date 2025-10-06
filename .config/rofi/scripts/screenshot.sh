@@ -18,6 +18,7 @@ chosen=$(echo -e "$options" | rofi -dmenu -p "Screenshot" -theme ~/.config/rofi/
 
 take_screenshot() {
     type=$1
+    
     case $type in
         "$FULL")
             sleep 1
@@ -32,15 +33,33 @@ take_screenshot() {
             notify-send "Screenshot Taken" "Selected area saved to Screenshots folder"
             ;;
         "$WIN")
-            if command -v hyprctl &> /dev/null; then
-                WINDOW=$(hyprctl activewindow -j | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')
-                sleep 0.5
-                DATE=$(date +"%Y-%m-%d_%H-%M-%S")
-                grim -g "$WINDOW" "$SCREENSHOT_DIR/window_$DATE.png"
-                notify-send "Screenshot Taken" "Active window saved to Screenshots folder"
-            else
-                notify-send "Screenshot Error" "hyprctl not found - required for window screenshots"
-            fi
+            sleep 0.5
+            DATE=$(date +"%Y-%m-%d_%H-%M-%S")
+            case "$XDG_CURRENT_DESKTOP" in
+                Hyprland)
+                    if command -v hyprctl &> /dev/null; then
+                        WINDOW=$(hyprctl activewindow -j | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')
+                        grim -g "$WINDOW" "$SCREENSHOT_DIR/window_$DATE.png"
+                        notify-send "Screenshot Taken" "Active window saved to Screenshots folder"
+                    else
+                        notify-send "Screenshot Error" "hyprctl not found - required for Hyprland window screenshots"
+                    fi
+                    ;;
+                niri)
+                    # Parse window info from niri msg window
+                    WINDOW_INFO=$(niri msg window 2>/dev/null | grep -A6 'Window ID .*: (focused)' | grep -E 'Window size|Window offset' | awk '{print $3}' | tr '\n' ' ')
+                    if [[ -n "$WINDOW_INFO" ]]; then
+                        read W H X Y <<< "$WINDOW_INFO"
+                        grim -g "${X},${Y} ${W}x${H}" "$SCREENSHOT_DIR/window_$DATE.png"
+                        notify-send "Screenshot Taken" "Active window saved to Screenshots folder (Niri)"
+                    else
+                        notify-send "Screenshot Error" "Could not detect active window in Niri"
+                    fi
+                    ;;
+                *)
+                    notify-send "Screenshot Error" "Unsupported desktop/session: $XDG_CURRENT_DESKTOP"
+                    ;;
+            esac
             ;;
         "$DELAY1")
             notify-send "Screenshot" "Taking screenshot in 1 minute..."

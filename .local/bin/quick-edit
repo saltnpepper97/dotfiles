@@ -212,7 +212,6 @@ configs=(
     $'🟦 Waybar Config\t'"$HOME/.config/waybar/config.jsonc"
     $'🎨 Waybar Style\t'"$HOME/.config/waybar/style.css"
     $'🏠 Hyprland Main\t'"$HOME/.config/hypr/hyprland.conf"
-    $'😴 Hypridle Config\t'"$HOME/.config/hypr/hypridle.conf"
     $'🔒 Hyprlock Config\t'"$HOME/.config/hypr/hyprlock.conf"
     $'🚀 Autostart\t'"$HOME/.config/hypr/configs/autostart.conf"
     $'⌨️ Keybinds\t'"$HOME/.config/hypr/configs/keybinds.conf"
@@ -226,6 +225,9 @@ configs=(
     $'📷 Screenshot Menu Config\t'"$HOME/.config/rofi/screenshot.rasi"
     $'🌐 Qutebrowser config\t'"$HOME/.config/qutebrowser/config.py"
     $'💬 Mako config\t'"$HOME/.config/wal/templates/mako"
+    $'🔥 Niri config\t'"$HOME/.config/niri/config.kdl"
+    $'😴 Stasis config\t'"$HOME/.config/stasis/stasis.rune"
+    $'📋 Claw config\t'"$HOME/.config/claw/claw.rune"
 
 )
 
@@ -256,5 +258,16 @@ file_path=$(echo "$selected" | cut -f2)
 
 # Create file if missing and open in editor
 create_file_if_missing "$file_path"
-hyprctl dispatch exec "kitty --class=floating-editor nvim '$file_path'"
-hyprctl dispatch killactive
+# Determine if we are running inside Niri
+if [[ "$XDG_SESSION_DESKTOP" == "niri" ]]; then
+    # Use Niri-specific spawn command
+    niri msg action spawn-sh  -- "kitty --class=floating-editor nvim '$file_path'"
+    
+    # Close active window using Niri
+    niri msg action close-window
+else
+    # Default behavior for Hyprland or other sessions
+    hyprctl dispatch exec "kitty --class=floating-editor nvim '$file_path'"
+    hyprctl dispatch killactive
+fi
+

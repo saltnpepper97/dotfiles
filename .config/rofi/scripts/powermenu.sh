@@ -66,9 +66,21 @@ run_cmd() {
 			mpc -q pause
 			amixer set Master mute
 			systemctl suspend
-		elif [[ $1 == '--logout' ]]; then
-			hyprctl dispatch exit
-		fi
+    elif [[ $1 == '--logout' ]]; then
+      # Check the running compositor via XDG_CURRENT_DESKTOP
+      case "$XDG_CURRENT_DESKTOP" in
+        Hyprland)
+          hyprctl dispatch exit
+          ;;
+        niri)
+          niri msg action quit
+          ;;
+        *)
+          # Fallback: try generic systemctl
+          loginctl terminate-session "$XDG_SESSION_ID"
+          ;;
+      esac
+    fi
 	else
 		exit 0
 	fi
@@ -84,7 +96,9 @@ case ${chosen} in
 		run_cmd --reboot
         ;;
     $lock)
-      sleep 0.5 && playerctl pause; loginctl lock-session
+      playerctl pause
+      nohup hyprlock >/dev/null 2>&1 &
+      exit 0
         ;;
     $suspend)
 		run_cmd --suspend

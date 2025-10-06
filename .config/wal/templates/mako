@@ -12,8 +12,9 @@ icon-path=/usr/share/icons/Boston
 max-icon-size=64
 default-timeout=5000
 ignore-timeout=1
-font=Inter 13
+font=AtkynsonMono Nerd Font 13
 progress-color=over {color1}
+anchor=top-center
 
 [urgency=low]
 border-color={color8}
@@ -32,7 +33,7 @@ group-by=category
 [app-name=notify-volume]
 layer=overlay
 history=0
-anchor=top-right
+anchor=top-center
 # Group all volume notifications together
 group-by=app-name
 # Hide the group-index

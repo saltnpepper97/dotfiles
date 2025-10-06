@@ -1,0 +1,28 @@
+theme:
+  light:
+    background "{background}"
+    background-alt "{color8}"
+    titlebar-background "{color0}"
+    text-primary "{foreground}"
+    text-secondary "{color8}"
+    hover "{color7}"
+    hover-titlebar "{color7}"
+    selected "{color4}"
+    selected-foreground "{background}"
+    highlight "{color5}"
+    outline "{color6}"
+  end
+  dark:
+    background "{background}"
+    background-alt "{color8}"
+    titlebar-background "{color0}"
+    text-primary "{foreground}"
+    text-secondary "{color8}"
+    hover "{color7}"
+    hover-titlebar "{color7}"
+    selected "{color4}"
+    selected-foreground "{background}"
+    highlight "{color5}"
+    outline "{color6}"
+  end
+end

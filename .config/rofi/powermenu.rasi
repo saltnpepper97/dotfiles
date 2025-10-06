@@ -12,11 +12,11 @@
 /*****----- Configuration -----*****/
 configuration {
     show-icons:                 false;
-    font:                       "Maple Mono NF 14";
+    font:                       "AtkynsonMono Nerd Font 14";
 }
 
 /*****----- Global Properties -----*****/
-@import                          "~/.cache/wal/colors-rofi-dark.rasi"
+@import                          "~/.cache/wal/rofi-colors.rasi"
 
 /*
 USE_BUTTONS=YES
@@ -92,20 +92,22 @@ message {
     enabled:                     true;
     margin:                      0px;
     padding:                     12px;
+    background-color:            transparent;
     border:                      3px solid;
-    border-radius:               15px 5px 15px 5px;
+    border-radius:               8px;
 }
 textbox {
     vertical-align:              0.5;
     horizontal-align:            0.5;
     blink:                       true;
     markup:                      true;
+    background-color:            transparent;
 }
 error-message {
     padding:                     12px;
     border:                      0px solid;
     border-radius:               0px;
-    font:                        "Maple Mono NF 16";
+    font:                        "AtkynsonMono Nerd Font 16";
 }
 error-message textbox {
     font: "Maple Mono NF 12";   /* adjust size as needed */
@@ -143,6 +145,7 @@ element {
     border:                      0px solid;
     border-radius:               8px;
     text-color:                  @foreground;
+    background-color:            transparent;
     cursor:                      pointer;
 }
 element-text {
@@ -153,6 +156,4 @@ element-text {
     vertical-align:              0.5;
     horizontal-align:            0.5;
 }
-element selected.normal {
-    border:                      2px ;
-}
+
